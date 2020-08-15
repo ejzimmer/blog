@@ -1,0 +1,16 @@
+---
+layout: base-layout.njk
+pagination:
+  data: collections.post
+  size: 10
+  reverse: true 
+  alias: posts
+---
+<ul>
+{% for post in posts %}
+  <li>
+    <a href="{{ post.url | url }}">{{ post.data.title }}</a>
+    {{ post.date }}
+  </li>
+{% endfor %}
+</ul>
