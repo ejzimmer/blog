@@ -32,7 +32,7 @@ This warning is very specifically related to hooks, so to understand what's goin
 Hooks give us a way to store state in a functional component. In the case of `useState()`, that state is the actual component state. But other hooks store other kinds of state - `useRef()` stores a reference to a particular object, while `useEffect()` and `useCallback()` store functions. We can't store these things inside the component - they'd get re-created as new objects each time the component rendered and the component function ran. But we also don't want to store them in global state, where anyone could just come along and change them.
 
 
-Fortunately, JavaScript does have a way to create private state specific to a particular function. We can use closures!
+Fortunately, JavaScript has a nice way to create private state specific to a particular function. We can use closures!
 
 
 ```js
@@ -384,5 +384,5 @@ Hopefully, all of this has given you a better understanding of how hooks work, a
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNDcyNzU0NzNdfQ==
+eyJoaXN0b3J5IjpbMTc3OTk0ODA5OV19
 -->
