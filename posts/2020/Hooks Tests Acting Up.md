@@ -22,16 +22,14 @@ We didn't find this warning particularly enlightening, especially given that a c
 You might find using act() directly a bit too verbose. To avoid some of the boilerplate, you could use a library like React Testing Library, whose helpers are wrapped with act().
 ```
 
-We'
-
-We were using React Testing Library! Everything should be wrapped in `act()` already! And our tests were actually passing. But it was enough of a mystery that we decided to dig a little deeper. What resulted was a wild ride through the inner workings of hooks, testing utilities, and how asynchronous events are handled in JavaScript. If you're curious too, then keep reading. If you just want to know how to make the warning go away, then skip ahead to the tl;dr.
+We were using React Testing Library! Everything should be wrapped in `act()` already! And our tests were actually passing. It was a bit of a mystery, so we decided to dig a little deeper and work out what was really going on. What resulted was a wild ride through the inner workings of hooks, testing utilities, and how asynchronous events are handled in JavaScript. If you're curious too, then keep reading. If you just want to know how to make the warning go away, then skip ahead to the tl;dr.
 
 
 __Hooks__
 This warning is very specifically related to hooks, so to understand what's going on, we first need to understand how hooks work.
 
 
-Hooks give us a way to store state in a functional component. In the case of `useState()`, that state is literal component state. But other hooks store other kinds of state - `useRef()` stores a reference to a particular object, while `useEffect()` and `useCallback()` store functions. We can't store these things inside the component - they'd get re-created as new objects each time the component rendered and the component function ran. But we also don't want to store them in global state, where anyone could just come along and change them.
+Hooks give us a way to store state in a functional component. In the case of `useState()`, that state is the actual component state. But other hooks store other kinds of state - `useRef()` stores a reference to a particular object, while `useEffect()` and `useCallback()` store functions. We can't store these things inside the component - they'd get re-created as new objects each time the component rendered and the component function ran. But we also don't want to store them in global state, where anyone could just come along and change them.
 
 
 Fortunately, JavaScript does have a way to create private state specific to a particular function. We can use closures!
@@ -386,5 +384,5 @@ Hopefully, all of this has given you a better understanding of how hooks work, a
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMjg2MzMwNzk5XX0=
+eyJoaXN0b3J5IjpbNDcyNzU0NzNdfQ==
 -->
