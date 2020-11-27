@@ -77,14 +77,9 @@ function React() {
 
 This version of `useState` gives us the things we wanted - an external place to store state that isn't accessible to every other bit of code running on the page. It does, however, have some downsides. Most importantly, it can only store one bit of state. If our component called `useState` multiple times, each new bit of state would overwrite the previous one.
 
-(There's also a small bug that will result in `_state` being set back to the initial value if we ever set it to something falsey. That's not really im
+(There's also a small bug that will result in `_state` being set back to the initial value if we ever set it to something falsey. That's not really important to this discussion though, and fixing it is left as an exercise for the reader).
 
-
-
-Firstly, there's a small bug that will result in `_state` being set back to the initial value if you ever set it to something falsey. That's not really important for our discussion though, so I'm going to leave you to ponder that one on your own. The important issue with this implementation of `useState` is that you can only use it to store one bit of state. If your component calls `useState` multiple times, each new bit of state will overwrite the previous one.
-
-
-We can fix this by replacing the `_state` variable with an array of state values. Once we do this, we also need to add some logic to control which bit of the array we should be accessing at any given time.
+We can solve the only-one-bit-state problem by replacing the `_state` variable with an *array* of state values. Once we do this, we also need to add some logic to control which bit of the array we should be accessing at any given time.
 
 
 ```js
@@ -390,5 +385,5 @@ Hopefully, all of this has given you a better understanding of how hooks work, a
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTEzNzAzNjYwNiwxNzc5OTQ4MDk5XX0=
+eyJoaXN0b3J5IjpbMTU1Nzk0NjczNywxNzc5OTQ4MDk5XX0=
 -->
