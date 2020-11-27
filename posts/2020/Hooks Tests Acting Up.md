@@ -75,7 +75,9 @@ function React() {
 ```
 
 
-This version of `useState` gives us the things we wanted - an external place to store state that isn't accessible to every other bit of code running on the page. It does, however, have some downsides. 
+This version of `useState` gives us the things we wanted - an external place to store state that isn't accessible to every other bit of code running on the page. It does, however, have some downsides. Most importantly, it can only store one bit of state. If our component called `useState` multiple times, each new bit of state would overwrite the previous one.
+
+(There's also a small bug that will result in `_state` being set back to the initial value if we ever set it to something falsey. That's not really im
 
 
 
@@ -388,5 +390,5 @@ Hopefully, all of this has given you a better understanding of how hooks work, a
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbODU1OTU0NjgzLDE3Nzk5NDgwOTldfQ==
+eyJoaXN0b3J5IjpbLTEzNzAzNjYwNiwxNzc5OTQ4MDk5XX0=
 -->
