@@ -337,7 +337,7 @@ const submitForm = async () => {
   });  
 };
 ```
-This is a utility function we use in some tests. It submits a form which 
+This is a utility function we use in some tests. It submits a form which triggers an API call. We could wait for the API call to return, and then wait for some change in the DOM, but often we don't really care about the returned result. For example, we could be testing that the for
 
 
 __tl;dr__
@@ -387,6 +387,6 @@ Hopefully, all of this has given you a better understanding of how hooks work, a
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTI2MjI4Njc3MSw1NDQxNDEyNjQsMTU1Nz
+eyJoaXN0b3J5IjpbMTYzNTA0NzA0NSw1NDQxNDEyNjQsMTU1Nz
 k0NjczNywxNzc5OTQ4MDk5XX0=
 -->
