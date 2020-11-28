@@ -241,17 +241,19 @@ At this point, `fetch()` will send off the network request, and `useAmiibo` will
 _After_ the test has returned, the `then()` blocks of the hook will run. `renderHook()` will notice that the state changed after the test finished, and it will throw that pesky warning.
 
 
-In this case, the warning isn't very helpful, because the test fails. We already know something has gone wrong. The warning is really there to guard against tests _passing_ incorrectly. Imagine if we had a test that checked that an wasn't thrown.
+In this case, the warning isn't very helpful, because the test fails. We already know something has gone wrong. The warning is really there to guard against tests _passing_ incorrectly. Imagine if we had a test that checked that an error wasn't thrown.
 
 ```js
 it('fetches nothing', () => {
-    const { result } = 
-    expect(renderHook).toBeUndefined()
+    expect(renderHook(() => useAmiibo(name))).not.toThrow()
 })
 ```
 
+This test will pass. But it's not really testing the right thing. If an error was thrown in the `t
 
-This test will pass. However, the behaviour is actually incorrect, because the value of `result.current.amiibo[0]` will be updated _after_ the test has completed. Reasoning about asynchronous code is _hard_, and this warning could potentially save a lot of confusion. (I'll admit though, that the description isn't great. I find the text "runs like it does in the browser" particularly unhelpful as asynchronous code runs in essentially identical fashion on a server).
+However, the behaviour is actually incorrect. 
+
+, because the value of `result.current.amiibo[0]` will be updated _after_ the test has completed. Reasoning about asynchronous code is _hard_, and this warning could potentially save a lot of confusion. (I'll admit though, that the description isn't great. I find the text "runs like it does in the browser" particularly unhelpful as asynchronous code runs in essentially identical fashion on a server).
 
 
 If you're interested in the details of how JavaScript handles asynchronous code and promises, check out Jake Archibald's article on [https://jakearchibald.com/2015/tasks-microtasks-queues-and-schedules/](Tasks, microtasks, queues and schedules). Or you can watch a [https://www.youtube.com/watch?v=2qDNgBgKsXI](video of me, talking about the Event Loop).
@@ -383,6 +385,6 @@ Hopefully, all of this has given you a better understanding of how hooks work, a
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE0NDg5MTk0ODAsMTU1Nzk0NjczNywxNz
+eyJoaXN0b3J5IjpbLTEwMTY4MzUwMTIsMTU1Nzk0NjczNywxNz
 c5OTQ4MDk5XX0=
 -->
