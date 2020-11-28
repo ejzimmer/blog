@@ -241,8 +241,7 @@ At this point, `fetch()` will send off the network request, and `useAmiibo` will
 _After_ the test has returned, the `then()` blocks of the hook will run. `renderHook()` will notice that the state changed after the test finished, and it will throw that pesky warning.
 
 
-In this case, the warning isn't very helpful, because the test fails anyway. The warning is really there to guard against tests passing incorrectly. Imagine if we had a test that checked that the Amiibo wasn't updated, for some reason.
-
+In this case, the warning isn't very helpful, because the test fails. We already know something has gone wrong. The warning is really there to guard against tests _passing_ incorrectly. Imagine if we had a test that checked that an wasn't thrown.
 
 ```js
 it('fetches nothing', () => {
@@ -384,6 +383,6 @@ Hopefully, all of this has given you a better understanding of how hooks work, a
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNDYzODU0ODUzLDE1NTc5NDY3MzcsMTc3OT
-k0ODA5OV19
+eyJoaXN0b3J5IjpbLTkxNDQ5NzU1MCwxNTU3OTQ2NzM3LDE3Nz
+k5NDgwOTldfQ==
 -->
