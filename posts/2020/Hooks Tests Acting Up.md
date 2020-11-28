@@ -201,7 +201,7 @@ As I mentioned earlier, this is particularly confusing because the docs clearly 
 So what's going on?
 
 
-Well, one hint is that you're only going to see this warning if your hook is doing something asynchronous - like calling an API, or using a timer. If your hook uses `async/await`, or does something in the `then()` of a promise, or a `setTimeout()` callback, it's going to cause a problem. This is due to the way that JavaScript manages these asynchronous events. 
+Well, one hint is that you're only going to see this warning if your hook is doing something asynchronous - like calling an API, or using a timer. If your hook uses `async/await`, or does something in the `then()` of a promise, or a `setTimeout()` callback, it's potentially going to cause a problem. This is due to the way that JavaScript manages these asynchronous events. 
 
 
 Imagine we had a hook for fetching details about Nintendo Amiibo:
@@ -211,12 +211,11 @@ function useAmiibo(name) {
    fetch(`https://www.amiiboapi.com/api/amiibo/?name=${name}`)
     .then((response) => response.json())
     .then((response) => setAmiibo(response))
-
-
+    
    return amiibo
 }
 ```
-(This is a real API, you can call it if you like)
+(This is a real API; you can call it if you like)
 
 
 We can test it with a test like this:
@@ -383,6 +382,6 @@ Hopefully, all of this has given you a better understanding of how hooks work, a
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTg4NjU4Njg3NSwxNTU3OTQ2NzM3LDE3Nz
+eyJoaXN0b3J5IjpbLTQxMjMyODQ2MSwxNTU3OTQ2NzM3LDE3Nz
 k5NDgwOTldfQ==
 -->
