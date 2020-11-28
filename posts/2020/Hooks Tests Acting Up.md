@@ -309,15 +309,15 @@ Because scenarios 1 and 3 didn't involve any changes to the DOM, we couldn't wai
 
 ```js
 it('doesn\'t change anything when the API returns', async () => {
-   const axiosSpy = jest.spyOn(axios, 'get')
+   const spy = jest.spyOn(axios, 'get')
    render(<AccessControlledForm />)
-   await waitFor(() => expect(axiosSpy).toHaveBeenCalled())
+   await waitFor(() => expect(spy).toHaveBeenCalled())
    expect(form).toBeTruthy()
 }
 ```
 
 
-Similarly, if you find yourself in a situation where you need to wait for an element to disappear, rather than appear, you can use `waitForElementToBeRemoved()`, also supplied by `@testing-library/react`. This could be helpful if you need to wait for a loading indicator to disappear.
+If you find yourself in a situation where you need to wait for an element to disappear, rather than appear, then you have the option to use `waitForElementToBeRemoved()`, also supplied by `@testing-library/react`. This could be helpful if you need to wait for a loading indicator to disappear.
 
 
 ```js
@@ -326,6 +326,9 @@ it('shows Zelda', async () => {
     await waitForElementToBeRemoved(() => screen.getByTestId('spinner'))
     expect(screen.getByAltText('zelda').toBeTruthy()
 })
+```
+
+And, finally, sometimes the s
 
 
 __tl;dr__
@@ -375,6 +378,6 @@ Hopefully, all of this has given you a better understanding of how hooks work, a
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTU0NjMyNjE5Myw1NDQxNDEyNjQsMTU1Nz
+eyJoaXN0b3J5IjpbMTI4NDk0NjI4Nyw1NDQxNDEyNjQsMTU1Nz
 k0NjczNywxNzc5OTQ4MDk5XX0=
 -->
