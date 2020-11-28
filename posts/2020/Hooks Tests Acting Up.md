@@ -135,8 +135,9 @@ it('returns the initial value', () => {
 ```
 
 
-We pass `renderHook()` a callback function which calls our hook. `renderHook()` generates a test component, which calls the callback function from within it. This gives us a way to ensure our hook is called from inside a com. It returns an object which has a property called `result`. The `result` object has another property called `current`, which contains the result of calling our callback.
+We pass `renderHook()` a callback function which calls our hook. `renderHook()` generates a test component, which calls the callback function from within it. This results in our hook being called from within a component, without us having to go to all the hassle of creating a component ourselves!
 
+`renderHook()` returns an object which has a property called `result`. The `result` object has another property called `current`, which contains the result of calling our callback.
 
 This might seem like a rather convoluted way of going about things, but there's a very good reason for it. `result.current` will always point to the value returned by the hook, even if that value changes _after_ `renderHook()` has returned. This allows us to test hooks which are able to change their own internal state.
 
@@ -381,6 +382,6 @@ Hopefully, all of this has given you a better understanding of how hooks work, a
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbOTQyMTYwMDc0LDE1NTc5NDY3MzcsMTc3OT
-k0ODA5OV19
+eyJoaXN0b3J5IjpbLTQ3MDMzMjgyMSwxNTU3OTQ2NzM3LDE3Nz
+k5NDgwOTldfQ==
 -->
