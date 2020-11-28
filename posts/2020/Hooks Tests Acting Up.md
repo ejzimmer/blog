@@ -230,13 +230,15 @@ it('fetches Zelda', () =>  {
 
 
 The code will run in the following order:
-1. `renderHook(() => useAmiibo(name)`
+1. `renderHook(() => useAmiibo(name)` in the test
 2. `renderHook()` internal code, which calls useAmiibo
-3. `const [amiibo, setAmiibo] = useState()`
-4. `fetch(...)`
+3. `const [amiibo, setAmiibo] = useState()` in the component
+4. `fetch(...)` in the component
 
 
-At this point, `fetch()` will send off the network request, and `useAmiibo` will return the (currently empty) `amiibo` object. The final line of the test will run, and the test will fail, because `result.current` currently points to any empty `amiibo`. _After_ the test has returned, the `then()` blocks of the hook will run. `renderHook()` will notice that the state changed after the test finished, and it will throw that pesky warning.
+At this point, `fetch()` will send off the network request, and `useAmiibo` will return the (currently `undefined`) `amiibo` object. The final line of the test will run, and the test will fail, because `result.current` currently points to any `undefined` `amiibo`. 
+
+_After_ the test has returned, the `then()` blocks of the hook will run. `renderHook()` will notice that the state changed after the test finished, and it will throw that pesky warning.
 
 
 In this case, the warning isn't very helpful, because the test fails anyway. The warning is really there to guard against tests passing incorrectly. Imagine if we had a test that checked that the Amiibo wasn't updated, for some reason.
@@ -382,6 +384,6 @@ Hopefully, all of this has given you a better understanding of how hooks work, a
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTQxMjMyODQ2MSwxNTU3OTQ2NzM3LDE3Nz
-k5NDgwOTldfQ==
+eyJoaXN0b3J5IjpbNDYzODU0ODUzLDE1NTc5NDY3MzcsMTc3OT
+k0ODA5OV19
 -->
