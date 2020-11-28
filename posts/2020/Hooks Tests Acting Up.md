@@ -91,12 +91,10 @@ function React() {
       // access the bit of state at the current index
       _state[currentIndex] = _state[currentIndex] || initial
 
-
       // make sure that we always use the same index for this particular bit of state
       // (by creating another closure!)
       const thisIndex = currentIndex
       setState = (newState) => _state[thisIndex] = newState
-
 
       // increment currentIndex so that the next hook accesses the next element in the array
       currentIndex++
@@ -385,5 +383,6 @@ Hopefully, all of this has given you a better understanding of how hooks work, a
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTU1Nzk0NjczNywxNzc5OTQ4MDk5XX0=
+eyJoaXN0b3J5IjpbMTIwOTg3NDQxLDE1NTc5NDY3MzcsMTc3OT
+k0ODA5OV19
 -->
