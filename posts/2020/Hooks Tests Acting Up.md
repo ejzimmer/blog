@@ -249,14 +249,7 @@ it('fetches nothing', () => {
 })
 ```
 
-This test will pass. But it's not really testing the right thing. If an error was thrown in the `then()` part of our hook, it wouldn't be thrown until after the test had already returned (successfully). The `act()` warning is warning us about situations like this - cases when an asynchronous action would have caused something to happen _after_ the test had already finished. Hopefully you agree that while the wording of the warning is a little confusing, 
-
-Hopefully you agree that while the wording of the
-
-However, the behaviour is actually incorrect. 
-
-, because the value of `result.current.amiibo[0]` will be updated _after_ the test has completed. Reasoning about asynchronous code is _hard_, and this warning could potentially save a lot of confusion. (I'll admit though, that the description isn't great. I find the text "runs like it does in the browser" particularly unhelpful as asynchronous code runs in essentially identical fashion on a server).
-
+This test will pass. But it's not really testing the right thing. If an error was thrown in the `then()` part of our hook, it wouldn't be thrown until after the test had already returned (successfully). The `act()` warning is warning us about situations like this - cases when an asynchronous action would have caused something to happen _after_ the test had already finished. Hopefully you agree that while the wording of the warning is a little confusing, the warning itself is potentially very helpful. After all, reasoning about asynchronous stuff is _hard_.
 
 If you're interested in the details of how JavaScript handles asynchronous code and promises, check out Jake Archibald's article on [https://jakearchibald.com/2015/tasks-microtasks-queues-and-schedules/](Tasks, microtasks, queues and schedules). Or you can watch a [https://www.youtube.com/watch?v=2qDNgBgKsXI](video of me, talking about the Event Loop).
 
@@ -387,6 +380,6 @@ Hopefully, all of this has given you a better understanding of how hooks work, a
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE5MDUwNTA5MDAsMTU1Nzk0NjczNywxNz
-c5OTQ4MDk5XX0=
+eyJoaXN0b3J5IjpbLTkyODM3OTM4MCwxNTU3OTQ2NzM3LDE3Nz
+k5NDgwOTldfQ==
 -->
