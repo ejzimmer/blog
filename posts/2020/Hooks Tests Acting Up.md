@@ -339,13 +339,14 @@ const submitForm = async () => {
 ```
 This is a utility function we use in some tests. It submits a form which triggers an API call. We could wait for the API call to return, and then wait for some change in the DOM, but often we don't really care about the returned result. For example, if we were testing that the form reset itself after submission - there are no DOM changes, only changes to the values of the form elements. In this case, we found using `act()` to be the simplest and clearest way to ensure all our async code executed correctly.
 
-And finally, if you're wondering why the function is named "act",  and you've made it this far, well, I'd hate for you to leave disappointed. "Act" comes from the "prepare, act, assert" testing pattern - it's
+And finally, if you're wondering why the function is named "act",  and you've made it this far, well, I'd hate for you to leave disappointed. "Act" comes from the "prepare, act, assert" testing pattern - it's equivalent to the "when" in "given, when then", if you're more familiar with that nomenclature. 
 
 __tl;dr__
-- Hooks are made of closures and rely on the component lifecycle to work correctly. As a result, you need to use something like `renderHook()` to test them.
-- Async code executing after your test has finished will result in a warning being thrown. This is a Good Thing as it helps ensure that you're testing exactly what you intend to test.
-- `await waitForNextUpdate()` will pause your test until the next event loop tick, ensuring any async callbacks have run
-- `await waitFor(...)` will wait until a specific condition has been met. You can wait for anything, but the most common use cases are waiting for a DOM element to appear, or waiting for a specific function (like `Axios.get`) to have been called. You can also `await waitForElementToBeRemoved(...)`
+So, what did we learn?
+- Hooks are made of closures and rely on the component lifecycle to work correctly. As a result, we need to use something like `renderHook()` to test them.
+- Async code executing after a test has finished will result in a warning being thrown. This is a Good Thing as it helps ensure that we're testing exactly what we intend to test.
+- `await waitForNextUpdate()` will pause a test until the next event loop tick, ensuring any async callbacks have run
+- `await waitFor(...)` will wait until a specific condition has been met. You can wait for anything, but the most common use cases are waiting for a DOM element to appear, or waiting for a specific function (like `Axios.get`) to have been called.  can also `await waitForElementToBeRemoved(...)`
 
 
 Hopefully, all of this has given you a better understanding of how hooks work, and will help you avoid pesky warnings in your tests in the future!
@@ -388,6 +389,6 @@ Hopefully, all of this has given you a better understanding of how hooks work, a
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE4NDA4MjgyMjAsNTQ0MTQxMjY0LDE1NT
-c5NDY3MzcsMTc3OTk0ODA5OV19
+eyJoaXN0b3J5IjpbMTc3Njc1Mzk2Myw1NDQxNDEyNjQsMTU1Nz
+k0NjczNywxNzc5OTQ4MDk5XX0=
 -->
