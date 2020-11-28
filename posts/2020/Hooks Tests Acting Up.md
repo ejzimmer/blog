@@ -339,8 +339,7 @@ const submitForm = async () => {
 ```
 This is a utility function we use in some tests. It submits a form which triggers an API call. We could wait for the API call to return, and then wait for some change in the DOM, but often we don't really care about the returned result. For example, if we were testing that the form reset itself after submission - there are no DOM changes, only changes to the values of the form elements. In this case, we found using `act()` to be the simplest and clearest way to ensure all our async code executed correctly.
 
-(Incidentally, if you're wondering, the name 
-
+And finally, if you're wondering why the function is named "act",  and you've made it this far, well, I'd hate for you to leave disappointed. "Act" comes from the "prepare, act, assert" testing pattern - it's
 
 __tl;dr__
 - Hooks are made of closures and rely on the component lifecycle to work correctly. As a result, you need to use something like `renderHook()` to test them.
@@ -389,6 +388,6 @@ Hopefully, all of this has given you a better understanding of how hooks work, a
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTEwNTM5NzYxNzQsNTQ0MTQxMjY0LDE1NT
+eyJoaXN0b3J5IjpbLTE4NDA4MjgyMjAsNTQ0MTQxMjY0LDE1NT
 c5NDY3MzcsMTc3OTk0ODA5OV19
 -->
