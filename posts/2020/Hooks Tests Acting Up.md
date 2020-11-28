@@ -328,7 +328,17 @@ it('shows Zelda', async () => {
 })
 ```
 
-And, finally, sometimes the s
+And, finally, sometimes the solution is to just do what the warning says, and wrap the call in `act()`.
+```js
+const fillAndSubmitForm = async (value) => {  
+  await act(async () => {  
+    enterTokens(tokens);  
+    selectRiskReason();  
+    await enterComment();  
+    await submitForm();  
+  });  
+};
+```
 
 
 __tl;dr__
@@ -378,6 +388,6 @@ Hopefully, all of this has given you a better understanding of how hooks work, a
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTI4NDk0NjI4Nyw1NDQxNDEyNjQsMTU1Nz
+eyJoaXN0b3J5IjpbMTMzNDAyNjczMyw1NDQxNDEyNjQsMTU1Nz
 k0NjczNywxNzc5OTQ4MDk5XX0=
 -->
