@@ -245,8 +245,8 @@ In this case, the warning isn't very helpful, because the test fails. We already
 
 ```js
 it('fetches nothing', () => {
-    const { result } = renderHook(() => useAmiibo(name))
-    expect(result.current.amiibo[0]).toBeUndefined()
+    const { result } = 
+    expect(renderHook).toBeUndefined()
 })
 ```
 
@@ -383,6 +383,6 @@ Hopefully, all of this has given you a better understanding of how hooks work, a
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTkxNDQ5NzU1MCwxNTU3OTQ2NzM3LDE3Nz
-k5NDgwOTldfQ==
+eyJoaXN0b3J5IjpbLTE0NDg5MTk0ODAsMTU1Nzk0NjczNywxNz
+c5OTQ4MDk5XX0=
 -->
