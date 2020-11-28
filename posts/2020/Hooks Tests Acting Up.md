@@ -158,7 +158,12 @@ it('increments the counter', () => {
 Our test fails! But why? Well, the call to `renderHook()` returns a state value (`count`) of 0, and a setter function (`incrementCount()`). Calling `incrementCount()` updates the state, and causes `renderHook()`'s fake test component to re-render. Re-rendering calls the `useCounter()` hook again, which returns an updated value for `count` of 1. But there's no way to pass this value back from the component to our test, so it just disappears into the ether. Our test is stuck with its initial `count` value of 0, and everything consequently fails. 
 
 
-To solve this problem, `renderHook()` can instead return an object with a `current` property, which contains the value returned by the `useCounter()` hook. Whenever the test component re-renders, `renderHook()` can update the value of `current` with the new object returned by our callback, ensuring our test always has access to the latest data. This is essentially the same functionality as the `useRef` hook.
+To solve this problem, `renderHook()` can instead return an object with a `current` property. Both `renderHook()` and our test have access to this o
+
+
+
+ The `current` property is what contains the value returned by the `useCounter()` hook. Both `renderHook()` and our test hav
+Whenever the test component re-renders, `renderHook()` can update the value of `current` with the new object returned by our callback, ensuring our test always has access to the latest data. This is essentially the same functionality as the `useRef` hook.
 
 
 ```js
@@ -382,6 +387,6 @@ Hopefully, all of this has given you a better understanding of how hooks work, a
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTc1MDQzMTcwMiwxNTU3OTQ2NzM3LDE3Nz
-k5NDgwOTldfQ==
+eyJoaXN0b3J5IjpbNjQwMTczNTE3LDE1NTc5NDY3MzcsMTc3OT
+k0ODA5OV19
 -->
