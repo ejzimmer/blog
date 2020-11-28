@@ -339,7 +339,7 @@ const submitForm = async () => {
 ```
 This is a utility function we use in some tests. It submits a form which triggers an API call. We could wait for the API call to return, and then wait for some change in the DOM, but often we don't really care about the returned result. For example, if we were testing that the form reset itself after submission - there are no DOM changes, only changes to the values of the form elements. In this case, we found using `act()` to be the simplest and clearest way to ensure all our async code executed correctly.
 
-One small word of warning though - if the warning is turning up as a result of a call to `render()` or `renderHook()`, then wrapping it in 
+One small word of warning though - if the warning is turning up as a result of a call to `render()` or `renderHook()`, then wrapping it in `act()` isn't going to help, as the call is already wrapped in `act()`. This happens to me a lot when I have a call to `render()` in a `beforeEach()`, which is rendering a component that makes an API call 
 
 And finally, if you're wondering why the function is named "act",  and you've made it this far, well, I'd hate for you to leave disappointed. "Act" comes from the "prepare, act, assert" testing pattern - it's equivalent to the "when" in "given, when then", if you're more familiar with that nomenclature. 
 
@@ -392,6 +392,6 @@ Hopefully, all of this has given you a better understanding of how hooks work, a
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNDEzMTE4NjU1LDU0NDE0MTI2NCwxNTU3OT
-Q2NzM3LDE3Nzk5NDgwOTldfQ==
+eyJoaXN0b3J5IjpbMTk2MTAzNDQzNiw1NDQxNDEyNjQsMTU1Nz
+k0NjczNywxNzc5OTQ4MDk5XX0=
 -->
