@@ -267,7 +267,7 @@ it('fetches Zelda', async () => {
 ```
 
 
-Just make sure you remember to use `await`, else it won't help at all.
+Just make sure you remember to use `await`, else it won't help at all. 
 
 
 __One last problem__
@@ -380,6 +380,6 @@ Hopefully, all of this has given you a better understanding of how hooks work, a
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTkyODM3OTM4MCwxNTU3OTQ2NzM3LDE3Nz
-k5NDgwOTldfQ==
+eyJoaXN0b3J5IjpbNTQ0MTQxMjY0LDE1NTc5NDY3MzcsMTc3OT
+k0ODA5OV19
 -->
