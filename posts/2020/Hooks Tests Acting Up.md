@@ -302,15 +302,14 @@ it('shows Zelda', async () => {
 It doesn't always have to be an element that your `waitFor`. For example, the situation that kicked off this whole investigation involved a hook which called an API to check if a user had access to a specific endpoint. There were three possible scenarios.
 1. The user definitely has access. Do nothing.
 2. The user definitely doesn't have access. Hide the form component and show a message.
-3. We're not sure if the user has access - either the API call hasn't returned yet, or it returned an error. In these cases, we want to do nothing. For our case, it was better to potentially allow an unauthorised user to  use the form than to potentiallyblock or slow down a user who did have access. (The unauthorised user would get blocked after they submitted the form anyway.)
-```
+3. We're not sure if the user has access - either the API call hasn't returned yet, or it returned an error. In these cases, we want to do nothing. For our case, it was better to potentially allow an unauthorised user to  use the form than to potentially block or slow down an authorised user. (The unauthorised user would get blocked by the API when they submitted the form anyway, so there was no real harm in letting them try.)
 
-
-Because scenarios 1 and 3 didn't involve any changes, we couldn't wait for any specific element to appear on the screen. Instead, we waited for the API call to happen.
+Because scenarios 1 and 3 didn't involve any changes to the DOM, we couldn't wait for any specific element to appear on the screen. Instead, we waited for the API call to happen.
 
 
 ```js
 it('doesn\'t change anything when the API returns', async () => {
+   const axiosSpy = jest.spyOn(axios, 'get')
    render(<AccessControlledForm />)
    await waitFor(() => expect(axiosSpy).toHaveBeenCalled())
    expect(form).toBeTruthy()
@@ -376,6 +375,6 @@ Hopefully, all of this has given you a better understanding of how hooks work, a
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTEyNjkyNjk2NzcsNTQ0MTQxMjY0LDE1NT
-c5NDY3MzcsMTc3OTk0ODA5OV19
+eyJoaXN0b3J5IjpbMTU0NjMyNjE5Myw1NDQxNDEyNjQsMTU1Nz
+k0NjczNywxNzc5OTQ4MDk5XX0=
 -->
