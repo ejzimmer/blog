@@ -302,7 +302,7 @@ it('shows Zelda', async () => {
 It doesn't always have to be an element that your `waitFor`. For example, the situation that kicked off this whole investigation involved a hook which called an API to check if a user had access to a specific endpoint. There were three possible scenarios.
 1. The user definitely has access. Do nothing.
 2. The user definitely doesn't have access. Hide the form component and show a message.
-3. We're not sure if the user has access - either because the API call hasn't returned yet, or it returned an error. In these cases, we want to do nothing. It was better to allow a user who did not have access to try and use the form than to block or slow down a user who did have access. (The unauthorised user would get blocked after they submitted the form anyway.)
+3. We're not sure if the user has access - either the API call hasn't returned yet, or it returned an error. In these cases, we want to do nothing. For our case, it was better to potentially allow an unauthorised user to  use the form than to potentiallyblock or slow down a user who did have access. (The unauthorised user would get blocked after they submitted the form anyway.)
 ```
 
 
@@ -376,6 +376,6 @@ Hopefully, all of this has given you a better understanding of how hooks work, a
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE3NTI3MTg4MTMsNTQ0MTQxMjY0LDE1NT
+eyJoaXN0b3J5IjpbLTEyNjkyNjk2NzcsNTQ0MTQxMjY0LDE1NT
 c5NDY3MzcsMTc3OTk0ODA5OV19
 -->
