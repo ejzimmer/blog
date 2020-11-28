@@ -337,7 +337,9 @@ const submitForm = async () => {
   });  
 };
 ```
-This is a utility function we use in some tests. It submits a form which triggers an API call. We could wait for the API call to return, and then wait for some change in the DOM, but often we don't really care about the returned result. For example, we could be testing that the for
+This is a utility function we use in some tests. It submits a form which triggers an API call. We could wait for the API call to return, and then wait for some change in the DOM, but often we don't really care about the returned result. For example, if we were testing that the form reset itself after submission - there are no DOM changes, only changes to the values of the form elements. In this case, we found using `act()` to be the simplest and clearest way to ensure all our async code executed correctly.
+
+(Incidentally, if you're wondering, the name 
 
 
 __tl;dr__
@@ -387,6 +389,6 @@ Hopefully, all of this has given you a better understanding of how hooks work, a
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTYzNTA0NzA0NSw1NDQxNDEyNjQsMTU1Nz
-k0NjczNywxNzc5OTQ4MDk5XX0=
+eyJoaXN0b3J5IjpbLTEwNTM5NzYxNzQsNTQ0MTQxMjY0LDE1NT
+c5NDY3MzcsMTc3OTk0ODA5OV19
 -->
