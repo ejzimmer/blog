@@ -330,17 +330,14 @@ it('shows Zelda', async () => {
 
 And, finally, sometimes the solution is to just do what the warning says, and wrap the call in `act()`.
 ```js
-const fillAndSubmitForm = async (value) => {  
+const submitForm = async () => {  
   await act(async () => {
-    const textInput = screen.getByRole('textbox')
-    fireEvent.change(textInput, { target: { va
-    enterValue(va);  
-    selectRiskReason();  
-    await enterComment();  
-    await submitForm();  
+    const form = screen.getByRole('form')
+    fireEvent.submit(form)
   });  
 };
 ```
+This is a utility function we use in some tests. It submits a form which 
 
 
 __tl;dr__
@@ -390,6 +387,6 @@ Hopefully, all of this has given you a better understanding of how hooks work, a
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNTA2NTg5ODMxLDU0NDE0MTI2NCwxNTU3OT
-Q2NzM3LDE3Nzk5NDgwOTldfQ==
+eyJoaXN0b3J5IjpbLTI2MjI4Njc3MSw1NDQxNDEyNjQsMTU1Nz
+k0NjczNywxNzc5OTQ4MDk5XX0=
 -->
