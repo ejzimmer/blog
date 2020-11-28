@@ -287,7 +287,7 @@ it('shows Zelda', () => {
 ```
 
 
-The test fails _and_ it throws that same warning again! Just like before, the test is completing before the async part of our hook has run. We don't have access to `waitForNextUpdate()` here, because we never called `renderHook()`. We can, however, use the `waitFor()` function supplied by `@testing-library/react` to do something very similar. The major difference is that we need to tell `waitFor()` what it is that it needs to wait for.
+The test fails and it throws that same warning again! Just like before, the test is completing before the async part of our hook has run. We don't have access to `waitForNextUpdate()` here, because we never called `renderHook()`. We can, however, use the `waitFor()` function supplied by `@testing-library/react` to do something very similar. The major difference is that we need to tell `waitFor()` what it is that it needs to wait for.
 
 
 ```js 
@@ -299,7 +299,7 @@ it('shows Zelda', async () => {
 ```
 
 
-You don't always have to wait for an element to appear either. For example, the situation that kicked off this whole investigation involved a hook which called an API to check if a user had access to a specific endpoint. There were three possible scenarios.
+It doesn't always have to be an element that your `waitFor`. For example, the situation that kicked off this whole investigation involved a hook which called an API to check if a user had access to a specific endpoint. There were three possible scenarios.
 1. The user definitely has access. Do nothing.
 2. The user definitely doesn't have access. Hide the form component and show a message.
 3. We're not sure if the user has access - either because the API call hasn't returned yet, or it returned an error. In these cases, we want to do nothing. It was better to allow a user who did not have access to try and use the form than to block or slow down a user who did have access. (The unauthorised user would get blocked after they submitted the form anyway.)
@@ -376,6 +376,6 @@ Hopefully, all of this has given you a better understanding of how hooks work, a
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTM1NTI2NjI3OSw1NDQxNDEyNjQsMTU1Nz
-k0NjczNywxNzc5OTQ4MDk5XX0=
+eyJoaXN0b3J5IjpbLTE3NTI3MTg4MTMsNTQ0MTQxMjY0LDE1NT
+c5NDY3MzcsMTc3OTk0ODA5OV19
 -->
