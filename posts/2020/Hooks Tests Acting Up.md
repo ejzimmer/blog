@@ -139,7 +139,7 @@ We pass `renderHook()` a callback function which calls our hook. `renderHook()` 
 
 `renderHook()` returns an object which has a property called `result`. The `result` object has another property called `current`, which contains the result of calling our callback.
 
-This might seem like a rather convoluted way of going about things, but there's a very good reason for it. `result.current` will always point to the value returned by the hook, even if that value changes _after_ `renderHook()` has returned. This allows us to test hooks which are able to change their own internal state.
+This might seem like a rather convoluted way of going about things, but there's a very good reason for it. `result.current` will always point to the value returned by the hook, even if that value changes after `renderHook()` has returned. This allows us to test hooks which are able to change their own state.
 
 
 To understand what's going on, lets imagine that `renderHook()` just returned `result`.
@@ -382,6 +382,6 @@ Hopefully, all of this has given you a better understanding of how hooks work, a
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTQ3MDMzMjgyMSwxNTU3OTQ2NzM3LDE3Nz
+eyJoaXN0b3J5IjpbLTc1MDQzMTcwMiwxNTU3OTQ2NzM3LDE3Nz
 k5NDgwOTldfQ==
 -->
