@@ -123,11 +123,9 @@ If you're interested in understanding this better (or you would like examples of
 
 
 __Testing Hooks__
-One thing that this code hopefully makes clear is that a hook will really only work if it's called from within the context of a component function (as per the [Rules of Hooks](https://reactjs.org/docs/hooks-rules.html)). Hooks need to be called in the correct order, so that `currentIndex` is incremented correctly, and `currentIndex` needs to be reset after each render. This has some implications for testing hooks, as we can't just call them, like we might with other JavaScript functions.
-
+One thing that this code hopefully makes clear is that a hook will really only work if it's called from within the context of a component function (as per the [Rules of Hooks](https://reactjs.org/docs/hooks-rules.html)). Hooks need to be called in the correct order, so that `currentIndex` is incremented correctly, and `currentIndex` needs to be reset after each render. This has some implications for testing hooks, as we can't just call them like we might with other JavaScript functions.
 
 Instead, we need to use something like `renderHook()`.
-
 
 ```js
 it('returns the initial value', () => {
@@ -137,7 +135,7 @@ it('returns the initial value', () => {
 ```
 
 
-We pass `renderHook()` a callback function which calls our hook. `renderHook()` generates a test component, which calls the callback function. It returns an object which has a property called `result`. The `result` object has another property called `current`, which contains the result of calling our callback.
+We pass `renderHook()` a callback function which calls our hook. `renderHook()` generates a test component, which calls the callback function from within it. This gives us a way to ensure our hook is called from inside a com. It returns an object which has a property called `result`. The `result` object has another property called `current`, which contains the result of calling our callback.
 
 
 This might seem like a rather convoluted way of going about things, but there's a very good reason for it. `result.current` will always point to the value returned by the hook, even if that value changes _after_ `renderHook()` has returned. This allows us to test hooks which are able to change their own internal state.
@@ -383,6 +381,6 @@ Hopefully, all of this has given you a better understanding of how hooks work, a
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTIwOTg3NDQxLDE1NTc5NDY3MzcsMTc3OT
+eyJoaXN0b3J5IjpbOTQyMTYwMDc0LDE1NTc5NDY3MzcsMTc3OT
 k0ODA5OV19
 -->
