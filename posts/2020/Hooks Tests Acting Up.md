@@ -249,10 +249,9 @@ it('fetches nothing', () => {
 })
 ```
 
-This test will pass. But it's not really testing the right thing. If an error was thrown in the `then()` part of our hook, it wouldn't be thrown until after the test had already returned (successfully). The `act()` error is warning us about situations like this - cases when an asynchronous action would have caused something to happen _after_ the test had already finished.
+This test will pass. But it's not really testing the right thing. If an error was thrown in the `then()` part of our hook, it wouldn't be thrown until after the test had already returned (successfully). The `act()` warning is warning us about situations like this - cases when an asynchronous action would have caused something to happen _after_ the test had already finished. Hopefully you agree that while the wording of the warning is a little confusing, 
 
-Now, I'll readily agree that the wording of the warning isn't that helpful. What does "runs like it does in the browser" even mean? Especially given that asynchronous code essentially runs the same in a browser as on a server? The 
-
+Hopefully you agree that while the wording of the
 
 However, the behaviour is actually incorrect. 
 
@@ -388,6 +387,6 @@ Hopefully, all of this has given you a better understanding of how hooks work, a
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbODYwMjc3NDY2LDE1NTc5NDY3MzcsMTc3OT
-k0ODA5OV19
+eyJoaXN0b3J5IjpbLTE5MDUwNTA5MDAsMTU1Nzk0NjczNywxNz
+c5OTQ4MDk5XX0=
 -->
