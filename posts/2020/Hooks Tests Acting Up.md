@@ -266,10 +266,6 @@ it('fetches Zelda', async () => {
 }
 ```
 
-
-Just make sure you remember to use `await`, else it won't help at all. 
-
-
 __One last problem__
 While we've now solved the issue of testing our hook, we are left with one last little problem - testing a component that uses our hook. 
 
@@ -380,6 +376,6 @@ Hopefully, all of this has given you a better understanding of how hooks work, a
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNTQ0MTQxMjY0LDE1NTc5NDY3MzcsMTc3OT
-k0ODA5OV19
+eyJoaXN0b3J5IjpbLTM1NTI2NjI3OSw1NDQxNDEyNjQsMTU1Nz
+k0NjczNywxNzc5OTQ4MDk5XX0=
 -->
