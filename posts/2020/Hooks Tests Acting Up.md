@@ -247,8 +247,7 @@ If you're interested in the details of how JavaScript handles asynchronous code 
 
 
 __Can we fix it?__
-Yes, we can, and the fix is actually pretty straightforward. One of the utility functions returned by `renderHook()` is a function called `waitForNextUpdate()` which returns a Promise, which
-
+Yes, we can, and the fix is actually pretty straightforward. One of the utility functions returned by `renderHook()` is a function called `waitForNextUpdate()` which returns a Promise that resolves the next time our hook is called.
 
 ```js
 it('fetches Zelda', async () => {
@@ -257,6 +256,7 @@ it('fetches Zelda', async () => {
     expect(result.current.amiibo[0].gameSeries.toBe('The Legend of Zelda')
 }
 ```
+Now, the test will pause after the hook is rendered. It will wait until the asynchronous `fetch` code returns and the state inside the hook is updated. Then, the test component will re-render
 
 __One last problem__
 While we've now solved the issue of testing our hook, we are left with one last little problem - testing a component that uses our hook. 
@@ -384,7 +384,7 @@ Hopefully, all of this has given you a better understanding of how hooks work, a
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTQ0NjE3MzkxNywzMTYyMDU4OTEsNDU1MD
+eyJoaXN0b3J5IjpbMTUxMjE3ODIzNSwzMTYyMDU4OTEsNDU1MD
 Q2MCwxOTY2NDcyOTA4LDkxNzkzNDI5Miw2NDEyNjE0NTgsLTkz
 NTIyNjUyLC0xNDAwNDcyOTYxLDExNzA3NTg3OTEsODEyMTU5OT
 k3LDU0NDE0MTI2NCwxNTU3OTQ2NzM3LDE3Nzk5NDgwOTldfQ==
