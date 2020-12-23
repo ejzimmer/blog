@@ -247,7 +247,7 @@ If you're interested in the details of how JavaScript handles asynchronous code 
 
 
 __Can we fix it?__
-Yes, we can, and the fix is actually pretty straightforward. One of the utility functions returned by `renderHook()` is a function called `waitForNextUpdate()` which forces our code to pause until the next tick of the event loop - i.e. until any `then()`s have been executed.
+Yes, we can, and the fix is actually pretty straightforward. One of the utility functions returned by `renderHook()` is a function called `waitForNextUpdate()` which returns a Promise, which
 
 
 ```js
@@ -384,7 +384,7 @@ Hopefully, all of this has given you a better understanding of how hooks work, a
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTMwNzE0ODcwNSwzMTYyMDU4OTEsNDU1MD
+eyJoaXN0b3J5IjpbMTQ0NjE3MzkxNywzMTYyMDU4OTEsNDU1MD
 Q2MCwxOTY2NDcyOTA4LDkxNzkzNDI5Miw2NDEyNjE0NTgsLTkz
 NTIyNjUyLC0xNDAwNDcyOTYxLDExNzA3NTg3OTEsODEyMTU5OT
 k3LDU0NDE0MTI2NCwxNTU3OTQ2NzM3LDE3Nzk5NDgwOTldfQ==
