@@ -172,7 +172,7 @@ it('increments the counter', () => {
     expect(result.current.count).toBe(1) // now this works too!
 })
 ```
-Fortunately, the reason for this extra bit of indirection is nowhere near as complicated as the first bit. 
+Fortunately, the reason for this extra bit of indirection is nowhere near as complicated as the first bit. `renderHook()` also needs to return a couple of utility functions, for doing things like forcing the test component to re-render, unmounting the test component (so we can test our clean-up code), and some other utilities that we'll talk about later.
 
 
 __The Act Warning__
@@ -382,9 +382,8 @@ Hopefully, all of this has given you a better understanding of how hooks work, a
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTQzMTM2NjI4NywzMTYyMDU4OTEsNDU1MD
-Q2MCwxOTY2NDcyOTA4LDkxNzkzNDI5Miw2NDEyNjE0NTgsLTkz
-NTIyNjUyLC0xNDAwNDcyOTYxLDExNzA3NTg3OTEsODEyMTU5OT
-k3LDU0NDE0MTI2NCwxNTU3OTQ2NzM3LDE3Nzk5NDgwOTldfQ==
-
+eyJoaXN0b3J5IjpbNDA1MjYzNzY5LDMxNjIwNTg5MSw0NTUwND
+YwLDE5NjY0NzI5MDgsOTE3OTM0MjkyLDY0MTI2MTQ1OCwtOTM1
+MjI2NTIsLTE0MDA0NzI5NjEsMTE3MDc1ODc5MSw4MTIxNTk5OT
+csNTQ0MTQxMjY0LDE1NTc5NDY3MzcsMTc3OTk0ODA5OV19
 -->
