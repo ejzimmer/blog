@@ -138,7 +138,7 @@ it('increments the counter', () => {
 ```
 Our test fails! But why?
 
-Well. Initially, we call `renderHook()`, which calls `useCounter()`, which returns `count` with a value of 0, along with a setter functio function, which can be used to increment the value of `count`. Our `result` variable points to th object.
+Well. Initially, we call `renderHook()`, which calls `useCounter()`. `useCounter()` returns an object with a `count` property with a value of 0, and a setter function, which can be used to increment the value of `count`. This object is returned by `renderHook
 
 ![initial state](https://raw.githubusercontent.com/ejzimmer/blog/master/posts/2020/images/initial_state.png)
 Our test then calls `incrementCount()`, which updates the state of the fake test component. Updating the state causes the component to re-render, which calls `useCounter()` again. `useCounter()` returns a new object, with the value of `count`  1.
@@ -382,7 +382,7 @@ Hopefully, all of this has given you a better understanding of how hooks work, a
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTQ2NDYxNjc3LDMxNjIwNTg5MSw0NTUwND
+eyJoaXN0b3J5IjpbOTg2MDMyNjY4LDMxNjIwNTg5MSw0NTUwND
 YwLDE5NjY0NzI5MDgsOTE3OTM0MjkyLDY0MTI2MTQ1OCwtOTM1
 MjI2NTIsLTE0MDA0NzI5NjEsMTE3MDc1ODc5MSw4MTIxNTk5OT
 csNTQ0MTQxMjY0LDE1NTc5NDY3MzcsMTc3OTk0ODA5OV19
