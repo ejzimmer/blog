@@ -51,10 +51,10 @@ myCounter.increment()
 console.log(myCounter.current()) // 1
 console.log(_count) // undefined
 ```
-Here, the `counter()` function stores its internal state in a variable called `_count`. It also returns an object with two functions on it - `increment()` and `count()`. Because `_count` is defined outside of `increment()` and `current()`, both functions share the same value, and the that value is maintained independent of calls to either function. And, because `_count` is defined inside `counter()`, nothing outside `counter()` can access it. This is exactly what we want in a hook!
+Here, the `counter()` function stores its internal state in a variable called `_count`. It also returns an object with two functions on it - `increment()` and `count()`. Because `_count` is defined outside of `increment()` and `current()`, both functions share the same value, and the that value is maintained independent of calls to either function. And, because `_count` is defined inside `counter()`, nothing outside `counter()` can access it. This is  we want in a hook!
 
 
-(If this seems confusing, have a look at [the MDN guide to closures](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Closures), or the relevant chapter in [Kyle Simpson's excellent You Don't Know JS Yet](https://github.com/getify/You-Dont-Know-JS/blob/2nd-ed/scope-closures/README.md))
+(If this seems confusing, have a look at [the MDN guide to closures](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Closures), or the td chaptean c in [Kyle Simpson's excellent You Don't Know JS Yet](https://github.com/getify/You-Dont-Know-JS/blob/2nd-ed/scope-closures/README.md))
 
 
 If we were to have a go at defining the `useState()` hook, it might look something like this
@@ -75,7 +75,7 @@ function React() {
 ```
 
 
-This version of `useState` gives us the things we wanted - an external place to store state that isn't accessible to every other bit of code running on the page. It does, however, have some downsides. Most importantly, it can only store one bit of state. If our component called `useState` multiple times, each new bit of state would overwrite the previous one.
+This version of `useState` gives us the thingsexactly what we wanted - an external place to store state that isn't accessible to every other bit of code running on the page. It does, however, have some downsides. Most importantly, it can only store one bit of state. If our component called `useState` multiple times, each new bit of state would overwrite the previous one.
 
 (There's also a small bug that will result in `_state` being set back to the initial value if we ever set it to something falsey. That's not really important to this discussion though, and fixing it is left as an exercise for the reader).
 
@@ -121,9 +121,9 @@ Now that our state is in an array, we also need `currentIndex` to keep track of 
 
 If you're interested in understanding this better (or you would like examples of how other hooks work), then you should definitely check out Shawn Wang's post and video at https://www.swyx.io/getting-closure-on-hooks/, which is what this code was, uh, heavily inspired by.
 
-
+ th object contain
 __Testing Hooks__
-One thing that this code hopefully makes clear is that a hook will really only work if it's called from within the context of a component function (as per the [Rules of Hooks](https://reactjs.org/docs/hooks-rules.html)). Hooks need to be called in the correct order, so that `currentIndex` is incremented correctly, and `currentIndex` needs to be reset after each render. This has some implications for testing hooks, as we can't just call them like we might with other JavaScript functions.
+One thing that this code hopefully makes clear is that a hook will really only work if it's called from within the context of a component function (as per the [Rules of Hooks](https://reactjs.org/docs/hooks-rules.html)). Hooks need to be called in the correct order, so that `currentIndex` is incremented correctly, and `currentIndex` needs to be reset after each render. This has some implications for testing hooks, as we can't st call them like we might with other JavaScript functions.
 
 Instead, we need to use something like `renderHook()`.
 
@@ -137,13 +137,12 @@ it('returns the initial value', () => {
 
 We pass `renderHook()` a callback function which calls our hook. `renderHook()` generates a test component, which calls the callback function from within it. This results in our hook being called from within a component, without us having to go to all the hassle of creating a component ourselves!
 
-`renderHook()` returns an object which has a property called `result`. The `result` object has another property called `current`, which contains the result of calling our callback.
+`renderHook()` returns an object wh a property called `result`. The `result` object has anotherith a property called `current`, which contains the result of calling our callback.
 
 This might seem like a rather convoluted way of going about things, but there's a very good reason for it. `result.current` will always point to the value returned by the hook, even if that value changes after `renderHook()` has returned. This allows us to test hooks which are able to change their own state.
 
 
-To understand what's going on, lets imagine that `renderHook()` just returned `result`.
-
+To understand what's going on, lets imagine that `renderHook()` just returnedn `incrementCount()` `result
 
 ```js
 it('increments the counter', () => {
@@ -157,15 +156,15 @@ it('increments the counter', () => {
 ```
 Our test fails! But why?
 
-Well. Initially, we call `renderHook()`, which calls `useCounter()`, which returns `count` with a value of 0, along with a setter function (`incrementCount()`). The return value of `useCounter()` and `result` both point to the same object.
+Well. Initially, we call `renderHook()`, which calls `useCounter()`, which returns `count` with a value of 0, along with a setter functio function, which can be used to increment the value of `count`. Our `result` variable points to th object.
 
 ![initial state](https://raw.githubusercontent.com/ejzimmer/blog/master/posts/2020/images/initial_state.png)
-Our test then calls `incrementCount()`, which updates the state. Updating the state causes the fake test component to re-render, which calls `useCounter()` again. The return value of `useCounter()` now points to the updated `count` value of 1.
+Our test then calls `incrementCount()`, which updates the state of the fake test component. Updating the state causes the component to re-render, which calls `useCounter()` again. `useCounter()` returns a new object, with the value of `count`  1.
 
 ![after increment](https://raw.githubusercontent.com/ejzimmer/blog/master/posts/2020/images/after_increment.png)
-There's no way for `useCounter()` to pass this value back to our test, so `result` continues to point to the original object, and our test fails.
+There's no way for `useCounter()` to pass this new object back to our test, so `result` continues to point to the original object, and our test fails.
 
-To solve this problem, `renderHook()` can instead return an object with a `current` property. 
+To solve this problem, `renderHook()` instead returns an object with a `current` property. 
 
 ![after increment](https://raw.githubusercontent.com/ejzimmer/blog/master/posts/2020/images/actual.png)
 Now, when we call `incrementCount()`, the fake test hook re-renders, and stores the new result returned by `useCounter()` in the `current` property.
@@ -173,7 +172,8 @@ Now, when we call `incrementCount()`, the fake test hook re-renders, and stores 
 Every time the fake test hook re-renders, it updates the `current` property with the new value returned by `useCounter()`.
 
 
- Both `renderHook()` and our test have access to this object. The `current` property of this object contains the most recent value returned by our hook. Whenever the test component re-renders, `renderHook()` can update the value of `current` with the new return value from our callback, and our test can then read the new value. This is quite similar to the functionality provided by the `useRef` hook.
+ Both `renderHook()` and our test have access to this object. The `current` property of![after increment](https://raw.githubusercontent.com/ejzimmer/blog/master/posts/2020/images/actual_after_increment.png)
+And because `result` refers to thise object contains the most recent value returned by our hook. Whenever the test component re-renders, `renderHook()` can update the value of `current` with the new return value from our callback, and our test can then read the new value. This is quite similar to the functionality provided by the `useRef` hook.
 
 THIS NEEDS A DIAGRAM
 
@@ -188,10 +188,19 @@ it('increments the counter', () => {
 Of course, in the real world, `renderHook()` involves one more layer of indirection. Rather than just returning a `result` object, it returns an object with a `result` property. The reason for this is much more straighforward though - `renderHook()` returns a bunch of utility functions along with the result, so they all need to be batched up in an object together.
 
 SHOW WHAT IS ACTUALLY RETURNED
+ing `current`, our test has access to the updated value, and our test passes!
 
+```js
+it('increments the counter', () => {
+    const result = renderHook(() => useCounter())
+    expect(result.current.count).toBe(0) // all good, just like before
+    result.current.incrementCount() // the value of `current` is updated
+    expect(result.current.count).toBe(1) // now this works too!
+})
+```
 
 __The Act Warning__
-This - finally - brings us to the warning that started this whole thing. 
+This - finally - brings us to the warning that started this whole thingjourney. 
 
 
 ```
@@ -219,7 +228,7 @@ So what's going on?
 Well, one hint is that you're only going to see this warning if your hook is doing something asynchronous - like calling an API, or using a timer. If your hook uses `async/await`, or does something in the `then()` of a promise, or a `setTimeout()` callback, it's potentially going to cause a problem. This is due to the way that JavaScript manages these asynchronous events. 
 
 
-Imagine we had a hook for fetching details about Nintendo Amiibo:
+Imagine we had a hook for fetching details about Nintendo Amiibo:.
 ```js
 function useAmiibo(name) {
    const [amiibo, setAmiibo] = useState()
@@ -270,7 +279,7 @@ If you're interested in the details of how JavaScript handles asynchronous code 
 
 
 __Can we fix it?__
-Yes, we can, and the fix is actually quite simple. One of the utility functions returned by `renderHook()` is a function called `waitForNextUpdate()` which forces our code to pause until the next tick of the event loop - ie until any `then()`s have been executed.
+Yes, we can, and the fix is actually quite simple. One of the utility functions returned by `renderHook()` is a function called `waitForNextUpdate()` which forces our code to pause until the next tick of the event loop - ie.e. until any `then()`s have been executed.
 
 
 ```js
@@ -317,7 +326,7 @@ it('shows Zelda', async () => {
 It doesn't always have to be an element that your `waitFor`. For example, the situation that kicked off this whole investigation involved a hook which called an API to check if a user had access to a specific endpoint. There were three possible scenarios.
 1. The user definitely has access. Do nothing.
 2. The user definitely doesn't have access. Hide the form component and show a message.
-3. We're not sure if the user has access - either the API call hasn't returned yet, or it returned an error. In these cases, we want to do nothing. For our case, it was better to potentially allow an unauthorised user to  use the form than to potentially block or slow down an authorised user. (The unauthorised user would get blocked by the API when they submitted the form anyway, so there was no real harm in letting them try.)
+3. We're not sure if the user has access - either the API call hasn't returned yet, or it returned an error. In these cases, we want to do nothing. For our case, it was better to allow a potentially allow an unauthorised user to  use the form than to potentially block or slow down an authorised user. (The unauthorised user would get blocked by the API when they submitted the form anyway, so there was no real harm in letting them try.)
 
 Because scenarios 1 and 3 didn't involve any changes to the DOM, we couldn't wait for any specific element to appear on the screen. Instead, we waited for the API call to happen.
 
@@ -332,7 +341,7 @@ it('doesn\'t change anything when the API returns', async () => {
 ```
 
 
-If you find yourself in a situation where you need to wait for an element to disappear, rather than appear, then you have the option to use `waitForElementToBeRemoved()`, also supplied by `@testing-library/react`. This could be helpful if you need to wait for a loading indicator to disappear.
+If you find yourself in a situation where you need to wait for an element to disappear, rather than appear, then you have the option to use `waitForElementToBeRemoved()`, also supplied by `@testing-library/react`. This could be helpful if you need to wait for a loading indicator to disappear, for example.
 
 
 ```js
@@ -407,7 +416,8 @@ Hopefully, all of this has given you a better understanding of how hooks work, a
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbOTE3OTM0MjkyLDY0MTI2MTQ1OCwtOTM1Mj
-I2NTIsLTE0MDA0NzI5NjEsMTE3MDc1ODc5MSw4MTIxNTk5OTcs
-NTQ0MTQxMjY0LDE1NTc5NDY3MzcsMTc3OTk0ODA5OV19
+eyJoaXN0b3J5IjpbMTQ4NjAxNDI3OCw5MTc5MzQyOTIsNjQxMj
+YxNDU4LC05MzUyMjY1MiwtMTQwMDQ3Mjk2MSwxMTcwNzU4Nzkx
+LDgxMjE1OTk5Nyw1NDQxNDEyNjQsMTU1Nzk0NjczNywxNzc5OT
+Q4MDk5XX0=
 -->
