@@ -157,7 +157,7 @@ it('increments the counter', () => {
 ```
 Our test fails! But why?
 
-Well, initially, we call `renderHook()`, which calls `useCounter()`. 
+Well, initially, we call `renderHook()`, which calls `useCounter()`, which returns `count` with a value of zero, along with a setter function (`incrementCount()`). The return value of `renderHook()`, the return value of `useCounter()` and `result` all point to the same object.
 Well, the call to `renderHook()` returns a state value (`count`) of 0, and a setter function (`incrementCount()`).
 
 ![initial state](https://raw.githubusercontent.com/ejzimmer/blog/master/posts/2020/images/initial_state.png)
@@ -399,7 +399,7 @@ Hopefully, all of this has given you a better understanding of how hooks work, a
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMjAxMzc4NzIyMiwxMTcwNzU4NzkxLDgxMj
+eyJoaXN0b3J5IjpbMTQ4MTUxNTgxNywxMTcwNzU4NzkxLDgxMj
 E1OTk5Nyw1NDQxNDEyNjQsMTU1Nzk0NjczNywxNzc5OTQ4MDk5
 XX0=
 -->
