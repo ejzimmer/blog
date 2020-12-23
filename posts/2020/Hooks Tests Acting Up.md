@@ -148,7 +148,7 @@ There's no way for `useCounter()` to pass this new object back to our test, so `
 
 To solve this problem, `renderHook()` can instead return an object with a `current` property. 
 
-![after increment](https://raw.githubusercontent.com/ejzimmer/blog/master/posts/2020/images/actual_after.png)
+![after increment](https://raw.githubusercontent.com/ejzimmer/blog/master/posts/2020/images/actual.png)
 Now, when we call `incrementCount()`, the fake test component re-renders, and stores the new result returned by `useCounter()` in the `current` property.
 
 ![after increment](https://raw.githubusercontent.com/ejzimmer/blog/master/posts/2020/images/actual_after_increment.png)
@@ -172,7 +172,7 @@ it('increments the counter', () => {
     expect(result.current.count).toBe(1) // now this works too!
 })
 ```
-Fortunately, the reason for this extra
+Fortunately, the reason for this extra bit of indirection is nowhere near as complicated as the first bit. 
 
 
 __The Act Warning__
@@ -382,9 +382,9 @@ Hopefully, all of this has given you a better understanding of how hooks work, a
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE0ODAyMTEwNDUsMzE2MjA1ODkxLDQ1NT
-A0NjAsMTk2NjQ3MjkwOCw5MTc5MzQyOTIsNjQxMjYxNDU4LC05
-MzUyMjY1MiwtMTQwMDQ3Mjk2MSwxMTcwNzU4NzkxLDgxMjE1OT
-k5Nyw1NDQxNDEyNjQsMTU1Nzk0NjczNywxNzc5OTQ4MDk5XX0=
+eyJoaXN0b3J5IjpbLTQzMTM2NjI4NywzMTYyMDU4OTEsNDU1MD
+Q2MCwxOTY2NDcyOTA4LDkxNzkzNDI5Miw2NDEyNjE0NTgsLTkz
+NTIyNjUyLC0xNDAwNDcyOTYxLDExNzA3NTg3OTEsODEyMTU5OT
+k3LDU0NDE0MTI2NCwxNTU3OTQ2NzM3LDE3Nzk5NDgwOTldfQ==
 
 -->
