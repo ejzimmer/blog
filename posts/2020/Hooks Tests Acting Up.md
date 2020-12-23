@@ -264,22 +264,23 @@ While we've now solved the issue of testing our hook, we are left with one last 
 
 ```js
 function ShowAmiibo({ name }) {
-    const amiibo = useAmiibo(name)
+   const amiibo = useAmiibo(name)
    return amiibo && <img src={amiibo.image} alt={name} /> || null
 }
 ```
-This component gets a name passed in on `props`, fetches the matching Amiibo and displays it.
-
-
+This component gets a name passed in on `props`, fetches the matching Amiibo and displays it. We can test it like this:
 ```js
 it('shows Zelda', () => {
     render(<ShowAmiibo name='zelda' />)
     expect(screen.getByAltText('zelda')).toBeTruthy()
 }
 ```
+But, the test fails and it throws that same warning again! Just like before, the test is completing before the async part of our hook has run. But this time, we can't use `waitForNextUpdate()`, because we never called `renderHook()`.
 
 
-The test fails and it throws that same warning again! Just like before, the test is completing before the async part of our hook has run. We don't have access to `waitForNextUpdate()` here, because we never called `renderHook()`. We can, however, use the `waitFor()` function supplied by `@testing-library/react` to do something very similar. The major difference is that we need to tell `waitFor()` what it is that it needs to wait for.
+
+
+We don't have access to `waitForNextUpdate()` here, because we never called `renderHook()`. We can, however, use the `waitFor()` function supplied by `@testing-library/react` to do something very similar. The major difference is that we need to tell `waitFor()` what it is that it needs to wait for.
 
 
 ```js 
@@ -384,9 +385,8 @@ Hopefully, all of this has given you a better understanding of how hooks work, a
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTA3NDgyNjU3NSwzMTYyMDU4OTEsNDU1MD
-Q2MCwxOTY2NDcyOTA4LDkxNzkzNDI5Miw2NDEyNjE0NTgsLTkz
-NTIyNjUyLC0xNDAwNDcyOTYxLDExNzA3NTg3OTEsODEyMTU5OT
-k3LDU0NDE0MTI2NCwxNTU3OTQ2NzM3LDE3Nzk5NDgwOTldfQ==
-
+eyJoaXN0b3J5IjpbODMzNDk2ODMwLDMxNjIwNTg5MSw0NTUwND
+YwLDE5NjY0NzI5MDgsOTE3OTM0MjkyLDY0MTI2MTQ1OCwtOTM1
+MjI2NTIsLTE0MDA0NzI5NjEsMTE3MDc1ODc5MSw4MTIxNTk5OT
+csNTQ0MTQxMjY0LDE1NTc5NDY3MzcsMTc3OTk0ODA5OV19
 -->
