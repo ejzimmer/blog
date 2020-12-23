@@ -303,12 +303,9 @@ it('doesn\'t change anything when the API returns', async () => {
    expect(form).toBeTruthy()
 }
 ```
+Another common scenario is needing to wait for an element to disappear. 
 
-
-If you find yourself in a situation where you need to wait for an element to *disappear*, rather than appear, you also have the option to use `waitForElementTo
-
- then you have the option to use `waitForElementToBeRemoved()`, also supplied by `@testing-library/react`. This could be helpful if you need to wait for a loading indicator to disappear, for example.
-
+If we had found ourselves in a situation where we needed to wait for an element to *disappear*, rather than appear, we also have the option to use `waitForElementToBeRemoved()`. 
 
 ```js
 it('shows Zelda', async () => {
@@ -382,9 +379,8 @@ Hopefully, all of this has given you a better understanding of how hooks work, a
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE3MjE5NzM1MDAsMzE2MjA1ODkxLDQ1NT
-A0NjAsMTk2NjQ3MjkwOCw5MTc5MzQyOTIsNjQxMjYxNDU4LC05
-MzUyMjY1MiwtMTQwMDQ3Mjk2MSwxMTcwNzU4NzkxLDgxMjE1OT
-k5Nyw1NDQxNDEyNjQsMTU1Nzk0NjczNywxNzc5OTQ4MDk5XX0=
-
+eyJoaXN0b3J5IjpbMzAxMTg4MTM4LDMxNjIwNTg5MSw0NTUwND
+YwLDE5NjY0NzI5MDgsOTE3OTM0MjkyLDY0MTI2MTQ1OCwtOTM1
+MjI2NTIsLTE0MDA0NzI5NjEsMTE3MDc1ODc5MSw4MTIxNTk5OT
+csNTQ0MTQxMjY0LDE1NTc5NDY3MzcsMTc3OTk0ODA5OV19
 -->
