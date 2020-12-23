@@ -169,13 +169,7 @@ To solve this problem, `renderHook()` instead returns an object with a `current`
 ![after increment](https://raw.githubusercontent.com/ejzimmer/blog/master/posts/2020/images/actual.png)
 Now, when we call `incrementCount()`, the fake test component re-renders, and stores the new result returned by `useCounter()` in the `current` property.
 
-Every time the fake test hook re-renders, it updates the `current` property with the new value returned by `useCounter()`.
-
-
- Both `renderHook()` and our test have access to this object. The `current` property of![after increment](https://raw.githubusercontent.com/ejzimmer/blog/master/posts/2020/images/actual_after_increment.png)
-And because `result` refers to thise object contains the most recent value returned by our hook. Whenever the test component re-renders, `renderHook()` can update the value of `current` with the new return value from our callback, and our test can then read the new value. This is quite similar to the functionality provided by the `useRef` hook.
-
-THIS NEEDS A DIAGRAM
+![after increment](https://raw.githubusercontent.com/ejzimmer/blog/master/posts/2020/images/actual_after_increment.png)So now our test always has access to the most recent value returned by `useCounter()`, and it passes!
 
 ```js
 it('increments the counter', () => {
@@ -416,8 +410,8 @@ Hopefully, all of this has given you a better understanding of how hooks work, a
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTEzNzk1NzQ0MDgsMTk2NjQ3MjkwOCw5MT
-c5MzQyOTIsNjQxMjYxNDU4LC05MzUyMjY1MiwtMTQwMDQ3Mjk2
-MSwxMTcwNzU4NzkxLDgxMjE1OTk5Nyw1NDQxNDEyNjQsMTU1Nz
-k0NjczNywxNzc5OTQ4MDk5XX0=
+eyJoaXN0b3J5IjpbMTYxNzMwMzgwNCwxOTY2NDcyOTA4LDkxNz
+kzNDI5Miw2NDEyNjE0NTgsLTkzNTIyNjUyLC0xNDAwNDcyOTYx
+LDExNzA3NTg3OTEsODEyMTU5OTk3LDU0NDE0MTI2NCwxNTU3OT
+Q2NzM3LDE3Nzk5NDgwOTldfQ==
 -->
