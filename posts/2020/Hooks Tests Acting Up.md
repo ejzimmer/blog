@@ -285,9 +285,9 @@ it('shows Zelda', async () => {
     expect(screen.getByAltText('zelda').toBeTruthy()
 }
 ```
-So now our test renders our component, and then waits until the DOM contains an element with the alt text '
+So now our test renders our component, and then waits until the DOM contains an element with the alt text `zelda`. If the element never appears, the test will eventually time out and fail. In our case though, the element is there, and the test passes!
 
-It doesn't always have to be an element that your `waitFor`. For example, the situation that kicked off this whole investigation involved a hook which called an API to check if a user had access to a specific endpoint. There were three possible scenarios.
+While the existence of a specific element is the most common thing to wait for, we do have other options. For example, the situation that kicked off this whole investigation involved a hook which called an API to check if a user had access to a specific endpoint. There were three possible scenarios.
 1. The user definitely has access. Do nothing.
 2. The user definitely doesn't have access. Hide the form component and show a message.
 3. We're not sure if the user has access - either the API call hasn't returned yet, or it returned an error. In these cases, we want to do nothing. For our case, it was better to allow a potentially allow an unauthorised user to  use the form than to potentially block or slow down an authorised user. (The unauthorised user would get blocked by the API when they submitted the form anyway, so there was no real harm in letting them try.)
@@ -380,8 +380,9 @@ Hopefully, all of this has given you a better understanding of how hooks work, a
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbOTY3NDM3NTY0LDMxNjIwNTg5MSw0NTUwND
-YwLDE5NjY0NzI5MDgsOTE3OTM0MjkyLDY0MTI2MTQ1OCwtOTM1
-MjI2NTIsLTE0MDA0NzI5NjEsMTE3MDc1ODc5MSw4MTIxNTk5OT
-csNTQ0MTQxMjY0LDE1NTc5NDY3MzcsMTc3OTk0ODA5OV19
+eyJoaXN0b3J5IjpbLTUyOTY4MzI1OCwzMTYyMDU4OTEsNDU1MD
+Q2MCwxOTY2NDcyOTA4LDkxNzkzNDI5Miw2NDEyNjE0NTgsLTkz
+NTIyNjUyLC0xNDAwNDcyOTYxLDExNzA3NTg3OTEsODEyMTU5OT
+k3LDU0NDE0MTI2NCwxNTU3OTQ2NzM3LDE3Nzk5NDgwOTldfQ==
+
 -->
