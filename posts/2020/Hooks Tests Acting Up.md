@@ -229,13 +229,12 @@ it('fetches the Zelda amiibo', () =>  {
 The code will run in the following order:
 1. `renderHook(() => useAmiibo(name))` in the test
 2. `renderHook()` internal code, which calls `useAmiibo()`
-3. `const [amiibo, setAmiibo] = useState()` in `useAmiibo()
-4. `fetch(...)` in the component
+3. `const [amiibo, setAmiibo] = useState()` in `useAmiibo()`
+4. `fetch(...)` in `useAmiibo()`
 
-At this point, `fetch()` will send off the network request, and `useAmiibo` will return the (currently `undefined`) `amiibo` object. The final line of the test will run, and the test will fail, because `result.current` currently points to any `undefined` `amiibo`. 
+At this point, `fetch()` will send off the network request, and `useAmiibo()` will return the `amiibo` object (which currently has a value of `undefined`). The final line of the test will run, and the test will fail, because `result.current` currently points to an `undefined` `amiibo`. 
 
 _After_ the test has returned, the `then()` blocks of the hook will run. `renderHook()` will notice that the state changed after the test finished, and it will throw that pesky warning.
-
 
 In this case, the warning isn't very helpful, because the test fails. We already know something has gone wrong. The warning is really there to guard against tests _passing_ incorrectly. Imagine if we had a test that checked that an error wasn't thrown.
 
@@ -245,7 +244,7 @@ it('fetches nothing', () => {
 })
 ```
 
-This test will pass. But it's not really testing the right thing. If an error was thrown in the `then()` part of our hook, it wouldn't be thrown until after the test had already returned (successfully). The `act()` warning is warning us about situations like this - cases when an asynchronous action would have caused something to happen _after_ the test had already finished. Hopefully you agree that while the wording of the warning is a little confusing, the warning itself is potentially very helpful. After all, reasoning about asynchronous stuff is _hard_.
+This test will pass. But it's not really testing the right thing. If an error was thrown in the `then()` part of our hook, it wouldn't be thrown until *after* the test had already returned (successfully). The `act()` warning is warning us about situations like this - cases when an asynchronous action would have caused something to happen _after_ the test had already finished. Hopefully you agree that while the wording of the warning is a little confusing, the warning itself is potentially very helpful. After all, reasoning about asynchronous stuff is _hard_.
 
 If you're interested in the details of how JavaScript handles asynchronous code and promises, check out Jake Archibald's article on [https://jakearchibald.com/2015/tasks-microtasks-queues-and-schedules/](Tasks, microtasks, queues and schedules). Or you can watch a [https://www.youtube.com/watch?v=2qDNgBgKsXI](video of me, talking about the Event Loop).
 
@@ -388,8 +387,8 @@ Hopefully, all of this has given you a better understanding of how hooks work, a
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE2NzYyNjMxMzMsMTk2NjQ3MjkwOCw5MT
-c5MzQyOTIsNjQxMjYxNDU4LC05MzUyMjY1MiwtMTQwMDQ3Mjk2
-MSwxMTcwNzU4NzkxLDgxMjE1OTk5Nyw1NDQxNDEyNjQsMTU1Nz
-k0NjczNywxNzc5OTQ4MDk5XX0=
+eyJoaXN0b3J5IjpbNDU1MDQ2MCwxOTY2NDcyOTA4LDkxNzkzND
+I5Miw2NDEyNjE0NTgsLTkzNTIyNjUyLC0xNDAwNDcyOTYxLDEx
+NzA3NTg3OTEsODEyMTU5OTk3LDU0NDE0MTI2NCwxNTU3OTQ2Nz
+M3LDE3Nzk5NDgwOTldfQ==
 -->
