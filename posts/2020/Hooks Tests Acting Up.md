@@ -204,7 +204,7 @@ So what's going on?
 
 Well, one hint is that you're only going to see this warning if your hook is doing something asynchronous - like calling an API, or using a timer. If your hook uses `async/await`, or does something in the `then()` of a promise, or a `setTimeout()` callback, it's potentially going to cause a problem. This is due to the way that JavaScript manages these asynchronous events. 
 
-Imagine we had a hook for fetching details about Nintendo Amiibo:
+Imagine we had a hook for fetching details about Nintendo amiibo:
 ```js
 function useAmiibo(name) {
    const [amiibo, setAmiibo] = useState()
@@ -219,21 +219,18 @@ function useAmiibo(name) {
 
 We can test it with a test like this:
 
-
 ```js
-it('fetches Zelda', () =>  {
+it('fetches the Zelda amiibo', () =>  {
     const { result } = renderHook(() => useAmiibo(name))
     expect(result.current.amiibo[0].gameSeries.toBe('The Legend of Zelda')
 })
 ```
 
-
 The code will run in the following order:
-1. `renderHook(() => useAmiibo(name)` in the test
-2. `renderHook()` internal code, which calls useAmiibo
-3. `const [amiibo, setAmiibo] = useState()` in the component
+1. `renderHook(() => useAmiibo(name))` in the test
+2. `renderHook()` internal code, which calls `useAmiibo()`
+3. `const [amiibo, setAmiibo] = useState()` in `useAmiibo()
 4. `fetch(...)` in the component
-
 
 At this point, `fetch()` will send off the network request, and `useAmiibo` will return the (currently `undefined`) `amiibo` object. The final line of the test will run, and the test will fail, because `result.current` currently points to any `undefined` `amiibo`. 
 
@@ -391,8 +388,8 @@ Hopefully, all of this has given you a better understanding of how hooks work, a
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTA2NTg1Njk1OCwxOTY2NDcyOTA4LDkxNz
-kzNDI5Miw2NDEyNjE0NTgsLTkzNTIyNjUyLC0xNDAwNDcyOTYx
-LDExNzA3NTg3OTEsODEyMTU5OTk3LDU0NDE0MTI2NCwxNTU3OT
-Q2NzM3LDE3Nzk5NDgwOTldfQ==
+eyJoaXN0b3J5IjpbLTE2NzYyNjMxMzMsMTk2NjQ3MjkwOCw5MT
+c5MzQyOTIsNjQxMjYxNDU4LC05MzUyMjY1MiwtMTQwMDQ3Mjk2
+MSwxMTcwNzU4NzkxLDgxMjE1OTk5Nyw1NDQxNDEyNjQsMTU1Nz
+k0NjczNywxNzc5OTQ4MDk5XX0=
 -->
