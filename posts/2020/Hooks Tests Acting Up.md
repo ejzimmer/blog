@@ -166,7 +166,7 @@ There's no way for `useCounter()` to pass this new object back to our test, so `
 
 To solve this problem, `renderHook()` instead returns an object with a `current` property. 
 
-![after increment](https://raw.githubusercontent.com/ejzimmer/blog/master/posts/2020/images/actual.png)
+![after increment](https://raw.githubusercontent.com/ejzimmer/blog/master/posts/2020/images/actual_current.png)
 Now, when we call `incrementCount()`, the fake test hook re-renders, and stores the new result returned by `useCounter()` in the `current` property.
 
 Every time the fake test hook re-renders, it updates the `current` property with the new value returned by `useCounter()`.
@@ -416,7 +416,7 @@ Hopefully, all of this has given you a better understanding of how hooks work, a
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTQ4NjAxNDI3OCw5MTc5MzQyOTIsNjQxMj
+eyJoaXN0b3J5IjpbMTk2NjQ3MjkwOCw5MTc5MzQyOTIsNjQxMj
 YxNDU4LC05MzUyMjY1MiwtMTQwMDQ3Mjk2MSwxMTcwNzU4Nzkx
 LDgxMjE1OTk5Nyw1NDQxNDEyNjQsMTU1Nzk0NjczNywxNzc5OT
 Q4MDk5XX0=
