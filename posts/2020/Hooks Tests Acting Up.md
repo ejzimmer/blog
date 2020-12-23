@@ -169,7 +169,8 @@ To solve this problem, `renderHook()` instead returns an object with a `current`
 ![after increment](https://raw.githubusercontent.com/ejzimmer/blog/master/posts/2020/images/actual.png)
 Now, when we call `incrementCount()`, the fake test component re-renders, and stores the new result returned by `useCounter()` in the `current` property.
 
-![after increment](https://raw.githubusercontent.com/ejzimmer/blog/master/posts/2020/images/actual_after_increment.png)So now our test always has access to the most recent value returned by `useCounter()`, and it passes!
+![after increment](https://raw.githubusercontent.com/ejzimmer/blog/master/posts/2020/images/actual_after_increment.png)
+So now our test always has access to the most recent value returned by `useCounter()`, and it passes!
 
 ```js
 it('increments the counter', () => {
@@ -179,6 +180,9 @@ it('increments the counter', () => {
     expect(result.current.count).toBe(1) // now this works too!
 })
 ```
+
+Of course, in the Real World, things are slightly more complicated than this - `renderHook()` actually returns an object with a property called `result`, which contains an object with a property called `current`. So our test really looks like this:
+
 
 __The Act Warning__
 This - finally - brings us to the warning that started this whole journey. 
@@ -387,8 +391,8 @@ Hopefully, all of this has given you a better understanding of how hooks work, a
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMzE2MjA1ODkxLDQ1NTA0NjAsMTk2NjQ3Mj
-kwOCw5MTc5MzQyOTIsNjQxMjYxNDU4LC05MzUyMjY1MiwtMTQw
-MDQ3Mjk2MSwxMTcwNzU4NzkxLDgxMjE1OTk5Nyw1NDQxNDEyNj
-QsMTU1Nzk0NjczNywxNzc5OTQ4MDk5XX0=
+eyJoaXN0b3J5IjpbMzAxNzk0MjUwLDMxNjIwNTg5MSw0NTUwND
+YwLDE5NjY0NzI5MDgsOTE3OTM0MjkyLDY0MTI2MTQ1OCwtOTM1
+MjI2NTIsLTE0MDA0NzI5NjEsMTE3MDc1ODc5MSw4MTIxNTk5OT
+csNTQ0MTQxMjY0LDE1NTc5NDY3MzcsMTc3OTk0ODA5OV19
 -->
