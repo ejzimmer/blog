@@ -244,13 +244,13 @@ it('fetches nothing', () => {
 })
 ```
 
-This test will pass. But it's not really testing the right thing. If an error was thrown in the `then()` part of our hook, it wouldn't be thrown until *after* the test had already returned (successfully). The `act()` warning is warning us about situations like this - cases when an asynchronous action would have caused something to happen _after_ the test had already finished. Hopefully you agree that while the wording of the warning is a little confusing, the warning itself is potentially very helpful. After all, reasoning about asynchronous stuff is _hard_.
+This test will pass. But it's not really testing the right thing. If an error was thrown in the `then()` part of our hook, it wouldn't be thrown until *after* the test had already returned successfully. The `act()` warning is warning us about situations like this - cases when an asynchronous action would have caused something to happen _after_ the test had already finished. Hopefully you agree that while the wording of the warning is a little confusing, the warning itself is potentially very helpful. After all, reasoning about asynchronous stuff is _hard_.
 
 If you're interested in the details of how JavaScript handles asynchronous code and promises, check out Jake Archibald's article on [https://jakearchibald.com/2015/tasks-microtasks-queues-and-schedules/](Tasks, microtasks, queues and schedules). Or you can watch a [https://www.youtube.com/watch?v=2qDNgBgKsXI](video of me, talking about the Event Loop).
 
 
 __Can we fix it?__
-Yes, we can, and the fix is actually quite simple. One of the utility functions returned by `renderHook()` is a function called `waitForNextUpdate()` which forces our code to pause until the next tick of the event loop - ie.e. until any `then()`s have been executed.
+Yes, we can, and the fix is actually pretty straightforward. One of the utility functions returned by `renderHook()` is a function called `waitForNextUpdate()` which forces our code to pause until the next tick of the event loop - i.e. until any `then()`s have been executed.
 
 
 ```js
@@ -387,8 +387,8 @@ Hopefully, all of this has given you a better understanding of how hooks work, a
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNDU1MDQ2MCwxOTY2NDcyOTA4LDkxNzkzND
-I5Miw2NDEyNjE0NTgsLTkzNTIyNjUyLC0xNDAwNDcyOTYxLDEx
-NzA3NTg3OTEsODEyMTU5OTk3LDU0NDE0MTI2NCwxNTU3OTQ2Nz
-M3LDE3Nzk5NDgwOTldfQ==
+eyJoaXN0b3J5IjpbMzE2MjA1ODkxLDQ1NTA0NjAsMTk2NjQ3Mj
+kwOCw5MTc5MzQyOTIsNjQxMjYxNDU4LC05MzUyMjY1MiwtMTQw
+MDQ3Mjk2MSwxMTcwNzU4NzkxLDgxMjE1OTk5Nyw1NDQxNDEyNj
+QsMTU1Nzk0NjczNywxNzc5OTQ4MDk5XX0=
 -->
