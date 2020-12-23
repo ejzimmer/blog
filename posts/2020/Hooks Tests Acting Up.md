@@ -199,7 +199,7 @@ As I mentioned earlier, this is particularly confusing because the docs clearly 
 
 So what's going on?
 
-Well, one hint is that you're only going to see this warning if your hook is doing something asynchronous - like calling an API, or using a timer. If your hook uses `async/await`, or does something in the `then()` of a promise, or a `setTimeout()` callback, it's potentially going to cause a problem. This is due to the way that JavaScript manages these asynchronous events. 
+Well, one hint is that we're only going to see this warning if our hook is doing something asynchronous - like calling an API, or using a timer. If our hook uses `async/await`, or does something in the `then()` of a promise, or a `setTimeout()` callback, it's potentially going to cause a problem. This is because of how JavaScript manages these asynchronous events. 
 
 Imagine we had a hook for fetching details about Nintendo amiibo:
 ```js
@@ -384,9 +384,9 @@ Hopefully, all of this has given you a better understanding of how hooks work, a
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTEwNzI5Mzg4NjMsMzE2MjA1ODkxLDQ1NT
-A0NjAsMTk2NjQ3MjkwOCw5MTc5MzQyOTIsNjQxMjYxNDU4LC05
-MzUyMjY1MiwtMTQwMDQ3Mjk2MSwxMTcwNzU4NzkxLDgxMjE1OT
-k5Nyw1NDQxNDEyNjQsMTU1Nzk0NjczNywxNzc5OTQ4MDk5XX0=
+eyJoaXN0b3J5IjpbMTMwNzE0ODcwNSwzMTYyMDU4OTEsNDU1MD
+Q2MCwxOTY2NDcyOTA4LDkxNzkzNDI5Miw2NDEyNjE0NTgsLTkz
+NTIyNjUyLC0xNDAwNDcyOTYxLDExNzA3NTg3OTEsODEyMTU5OT
+k3LDU0NDE0MTI2NCwxNTU3OTQ2NzM3LDE3Nzk5NDgwOTldfQ==
 
 -->
