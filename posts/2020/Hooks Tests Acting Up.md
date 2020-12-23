@@ -172,8 +172,10 @@ it('increments the counter', () => {
     expect(result.current.count).toBe(1) // now this works too!
 })
 ```
-Fortunately, the reason for this extra bit of indirection is nowhere near as complicated as the first bit. `renderHook()` also needs to return a couple of utility functions, for doing things like forcing the test component to re-render, unmounting the test component (so we can test our clean-up code), and some other utilities that we'll talk about later.
-
+Fortunately, the reason for this extra bit of indirection is nowhere near as complicated as the first bit. `renderHook()` also needs to return a couple of utility functions, for doing things like forcing the test component to re-render, unmounting the test component (so we can test our clean-up code), and some other utilities that we'll talk about later. Bundling them up in a single object along with the result is just convenient.
+```js
+const { result, rerender, unmount, ...asynUtils } = renderHook(...)
+```
 
 __The Act Warning__
 This - finally - brings us to the warning that started this whole journey. 
@@ -382,8 +384,9 @@ Hopefully, all of this has given you a better understanding of how hooks work, a
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNDA1MjYzNzY5LDMxNjIwNTg5MSw0NTUwND
-YwLDE5NjY0NzI5MDgsOTE3OTM0MjkyLDY0MTI2MTQ1OCwtOTM1
-MjI2NTIsLTE0MDA0NzI5NjEsMTE3MDc1ODc5MSw4MTIxNTk5OT
-csNTQ0MTQxMjY0LDE1NTc5NDY3MzcsMTc3OTk0ODA5OV19
+eyJoaXN0b3J5IjpbLTEwNzI5Mzg4NjMsMzE2MjA1ODkxLDQ1NT
+A0NjAsMTk2NjQ3MjkwOCw5MTc5MzQyOTIsNjQxMjYxNDU4LC05
+MzUyMjY1MiwtMTQwMDQ3Mjk2MSwxMTcwNzU4NzkxLDgxMjE1OT
+k5Nyw1NDQxNDEyNjQsMTU1Nzk0NjczNywxNzc5OTQ4MDk5XX0=
+
 -->
