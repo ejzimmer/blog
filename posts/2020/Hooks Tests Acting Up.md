@@ -277,7 +277,7 @@ it('shows Zelda', () => {
 ```
 But, the test fails and it throws that same warning again! Just like before, the test is completing before the async part of our hook has run. But this time, we can't use `waitForNextUpdate()`, because we never called `renderHook()`.
 
-
+Luckily, there is a similar function called `waitFor()` provided with React Testing Library. The big differenc
 
 
 We don't have access to `waitForNextUpdate()` here, because we never called `renderHook()`. We can, however, use the `waitFor()` function supplied by `@testing-library/react` to do something very similar. The major difference is that we need to tell `waitFor()` what it is that it needs to wait for.
@@ -385,8 +385,9 @@ Hopefully, all of this has given you a better understanding of how hooks work, a
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbODMzNDk2ODMwLDMxNjIwNTg5MSw0NTUwND
-YwLDE5NjY0NzI5MDgsOTE3OTM0MjkyLDY0MTI2MTQ1OCwtOTM1
-MjI2NTIsLTE0MDA0NzI5NjEsMTE3MDc1ODc5MSw4MTIxNTk5OT
-csNTQ0MTQxMjY0LDE1NTc5NDY3MzcsMTc3OTk0ODA5OV19
+eyJoaXN0b3J5IjpbMTE0NDAwODAzMSwzMTYyMDU4OTEsNDU1MD
+Q2MCwxOTY2NDcyOTA4LDkxNzkzNDI5Miw2NDEyNjE0NTgsLTkz
+NTIyNjUyLC0xNDAwNDcyOTYxLDExNzA3NTg3OTEsODEyMTU5OT
+k3LDU0NDE0MTI2NCwxNTU3OTQ2NzM3LDE3Nzk5NDgwOTldfQ==
+
 -->
