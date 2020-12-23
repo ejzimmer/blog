@@ -165,7 +165,15 @@ Our test then calls `incrementCount()`, which updates the state. Updating the st
 ![after increment](https://raw.githubusercontent.com/ejzimmer/blog/master/posts/2020/images/after_increment.png)
 There's no way for `useCounter()` to pass this value back to our test, so `result` continues to point to the original object, and our test fails.
 
-To solve this problem, `renderHook()` can instead return an object with a `current` property. Both `renderHook()` and our test have access to this object. The `current` property of this object contains the most recent value returned by our hook. Whenever the test component re-renders, `renderHook()` can update the value of `current` with the new return value from our callback, and our test can then read the new value. This is quite similar to the functionality provided by the `useRef` hook.
+To solve this problem, `renderHook()` can instead return an object with a `current` property. 
+
+![after increment](https://raw.githubusercontent.com/ejzimmer/blog/master/posts/2020/images/actual.png)
+Now, when we call `incrementCount()`, the fake test hook re-renders, and stores the new result returned by `useCounter()` in the `current` property.
+
+Every time the fake test hook re-renders, it updates the `current` property with the new value returned by `useCounter()`.
+
+
+ Both `renderHook()` and our test have access to this object. The `current` property of this object contains the most recent value returned by our hook. Whenever the test component re-renders, `renderHook()` can update the value of `current` with the new return value from our callback, and our test can then read the new value. This is quite similar to the functionality provided by the `useRef` hook.
 
 THIS NEEDS A DIAGRAM
 
@@ -399,7 +407,7 @@ Hopefully, all of this has given you a better understanding of how hooks work, a
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNjQxMjYxNDU4LC05MzUyMjY1MiwtMTQwMD
-Q3Mjk2MSwxMTcwNzU4NzkxLDgxMjE1OTk5Nyw1NDQxNDEyNjQs
-MTU1Nzk0NjczNywxNzc5OTQ4MDk5XX0=
+eyJoaXN0b3J5IjpbOTE3OTM0MjkyLDY0MTI2MTQ1OCwtOTM1Mj
+I2NTIsLTE0MDA0NzI5NjEsMTE3MDc1ODc5MSw4MTIxNTk5OTcs
+NTQ0MTQxMjY0LDE1NTc5NDY3MzcsMTc3OTk0ODA5OV19
 -->
