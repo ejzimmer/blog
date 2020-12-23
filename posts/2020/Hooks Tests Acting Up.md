@@ -46,9 +46,7 @@ console.log(_count) // undefined
 ```
 Here, the `counter()` function stores its internal state in a variable called `_count`. It also returns an object with two functions on it - `increment()` and `count()`. Because `_count` is defined outside of `increment()` and `current()`, both functions share the same value, and that value is maintained independent of calls to either function. And, because `_count` is defined inside `counter()`, nothing outside `counter()` can access it. This is  we want in a hook!
 
-
-(If this seems confusing, have a look at [the MDN guide to closures](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Closures), or the td chaptean c in [Kyle Simpson's excellent You Don't Know JS Yet](https://github.com/getify/You-Dont-Know-JS/blob/2nd-ed/scope-closures/README.md))
-
+(If this seems confusing, have a look at [the MDN guide to closures](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Closures), or [the chapter on scope and closures in Kyle Simpson's excellent You Don't Know JS Yet](https://github.com/getify/You-Dont-Know-JS/blob/2nd-ed/scope-closures/README.md))
 
 If we were to have a go at defining the `useState()` hook, it might look something like this
 ```js
@@ -59,7 +57,6 @@ function React() {
       _state = _state || initial // if _state hasn't been set to anything, set it to the initial value
       setState = (newState) => _state = newState
 
-
       return [_state, setState]
     }
     // ... everything else React does
@@ -68,11 +65,9 @@ function React() {
 ```
 
 
-This version of `useState` gives us the thingsexactly what we wanted - an external place to store state that isn't accessible to every other bit of code running on the page. It does, however, have some downsides. Most importantly, it can only store one bit of state. If our component called `useState` multiple times, each new bit of state would overwrite the previous one.
+This version of `useState` gives us exactly what we wanted - an external place to store state that isn't accessible to every other bit of code running on the page. It does, however, have a serious downside. It can only store one bit of state. If our component called `useState` multiple times, each new bit of state would overwrite the previous one.
 
-(There's also a small bug that will result in `_state` being set back to the initial value if we ever set it to something falsey. That's not really important to this discussion though, and fixing it is left as an exercise for the reader).
-
-We can solve the only-one-bit-state problem by replacing the `_state` variable with an *array* of state values. Once we do this, we also need to add some logic to control which bit of the array we should be accessing at any given time.
+We can solve the only-one-bit-of-state problem by replacing the `_state` variable with an *array* of state values. Once we do this, we also need to add some logic to control which bit of the array we should be accessing at any given time.
 
 
 ```js
@@ -391,7 +386,7 @@ Hopefully, all of this has given you a better understanding of how hooks work, a
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTIwOTkxMTAxMTEsMzE2MjA1ODkxLDQ1NT
+eyJoaXN0b3J5IjpbLTE3OTk3ODUzNjUsMzE2MjA1ODkxLDQ1NT
 A0NjAsMTk2NjQ3MjkwOCw5MTc5MzQyOTIsNjQxMjYxNDU4LC05
 MzUyMjY1MiwtMTQwMDQ3Mjk2MSwxMTcwNzU4NzkxLDgxMjE1OT
 k5Nyw1NDQxNDEyNjQsMTU1Nzk0NjczNywxNzc5OTQ4MDk5XX0=
