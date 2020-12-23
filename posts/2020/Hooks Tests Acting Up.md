@@ -108,11 +108,8 @@ Now that our state is in an array, we also need `currentIndex` to keep track of 
 
 If you're interested in understanding this better (or you would like examples of how other hooks work), then you should definitely check out [Shawn Wang's post and video on hooks](https://www.swyx.io/getting-closure-on-hooks/), which is what this code was, uh, heavily inspired by.
 
- th object contain
 __Testing Hooks__
-One thing that this code hopefully makes clear is that a hook will really only work if it's called from within the context of a component function (as per the [Rules of Hooks](https://reactjs.org/docs/hooks-rules.html)). Hooks need to be called in the correct order, so that `currentIndex` is incremented correctly, and `currentIndex` needs to be reset after each render. This has some implications for testing hooks, as we can't st call them like we might with other JavaScript functions.
-
-Instead, we need to use something like `renderHook()`.
+One thing that this code hopefully makes clear is that a hook will really only work if it's called from within the context of a component function (as per the [Rules of Hooks](https://reactjs.org/docs/hooks-rules.html)). Hooks within a function need to be called in the correct order, so that `currentIndex` is incremented correctly, and `currentIndex` needs to be reset after each render. This means that we can't test hooks just by calling them like regular JavaScript functions. Instead, we need to use something like `renderHook()`.
 
 ```js
 it('returns the initial value', () => {
@@ -385,7 +382,7 @@ Hopefully, all of this has given you a better understanding of how hooks work, a
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNDM2MDc0NDQ3LDMxNjIwNTg5MSw0NTUwND
+eyJoaXN0b3J5IjpbMTQ2NDYxNjc3LDMxNjIwNTg5MSw0NTUwND
 YwLDE5NjY0NzI5MDgsOTE3OTM0MjkyLDY0MTI2MTQ1OCwtOTM1
 MjI2NTIsLTE0MDA0NzI5NjEsMTE3MDc1ODc5MSw4MTIxNTk5OT
 csNTQ0MTQxMjY0LDE1NTc5NDY3MzcsMTc3OTk0ODA5OV19
