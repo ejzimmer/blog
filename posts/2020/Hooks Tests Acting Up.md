@@ -138,17 +138,17 @@ it('increments the counter', () => {
 ```
 Our test fails! But why?
 
-Well. Initially, we call `renderHook()`, which calls `useCounter()`. `useCounter()` returns an object with a `count` property with a value of 0, and a setter function, which can be used to increment the value of `count`. This object is returned by `renderHook
+Well. Initially, we call `renderHook()`, which calls `useCounter()`. `useCounter()` returns an object with a `count` property with a value of 0, and a setter function, which can be used to increment the value of `count`. This object is returned by `renderHook()` and stored in `result` in our test.
 
 ![initial state](https://raw.githubusercontent.com/ejzimmer/blog/master/posts/2020/images/initial_state.png)
-Our test then calls `incrementCount()`, which updates the state of the fake test component. Updating the state causes the component to re-render, which calls `useCounter()` again. `useCounter()` returns a new object, with the value of `count`  1.
+Our test then calls `incrementCount()`, which updates the state of the fake test component. Updating the state causes the component to re-render, which calls `useCounter()` again. `useCounter()` returns a new object, with the value of `count` set to 1.
 
 ![after increment](https://raw.githubusercontent.com/ejzimmer/blog/master/posts/2020/images/after_increment.png)
 There's no way for `useCounter()` to pass this new object back to our test, so `result` continues to point to the original object, and our test fails.
 
-To solve this problem, `renderHook()` instead returns an object with a `current` property. 
+To solve this problem, `renderHook()` can instead return an object with a `current` property. 
 
-![after increment](https://raw.githubusercontent.com/ejzimmer/blog/master/posts/2020/images/actual.png)
+![after increment](https://raw.githubusercontent.com/ejzimmer/blog/master/posts/2020/images/actual_after.png)
 Now, when we call `incrementCount()`, the fake test component re-renders, and stores the new result returned by `useCounter()` in the `current` property.
 
 ![after increment](https://raw.githubusercontent.com/ejzimmer/blog/master/posts/2020/images/actual_after_increment.png)
@@ -382,8 +382,9 @@ Hopefully, all of this has given you a better understanding of how hooks work, a
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbOTg2MDMyNjY4LDMxNjIwNTg5MSw0NTUwND
-YwLDE5NjY0NzI5MDgsOTE3OTM0MjkyLDY0MTI2MTQ1OCwtOTM1
-MjI2NTIsLTE0MDA0NzI5NjEsMTE3MDc1ODc5MSw4MTIxNTk5OT
-csNTQ0MTQxMjY0LDE1NTc5NDY3MzcsMTc3OTk0ODA5OV19
+eyJoaXN0b3J5IjpbLTE0ODAyMTEwNDUsMzE2MjA1ODkxLDQ1NT
+A0NjAsMTk2NjQ3MjkwOCw5MTc5MzQyOTIsNjQxMjYxNDU4LC05
+MzUyMjY1MiwtMTQwMDQ3Mjk2MSwxMTcwNzU4NzkxLDgxMjE1OT
+k5Nyw1NDQxNDEyNjQsMTU1Nzk0NjczNywxNzc5OTQ4MDk5XX0=
+
 -->
