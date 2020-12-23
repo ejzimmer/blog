@@ -67,8 +67,7 @@ function React() {
 
 This version of `useState` gives us exactly what we wanted - an external place to store state that isn't accessible to every other bit of code running on the page. It does, however, have a serious downside. It can only store one bit of state. If our component called `useState` multiple times, each new bit of state would overwrite the previous one.
 
-We can solve the only-one-bit-of-state problem by replacing the `_state` variable with an *array* of state values. Once we do this, we also need to add some logic to control which bit of the array we should be accessing at any given time.
-
+We can solve the only-one-bit-of-state problem by replacing the `_state` variable with an *array* of state values. Once we do this, we also need to add some logic to control which index of the array we should be accessing at any given time.
 
 ```js
 function React() {
@@ -107,7 +106,7 @@ function React() {
 Now that our state is in an array, we also need `currentIndex` to keep track of where each bit of state is stored within the array. Each time `useState()` is called, it saves the current value of `currentIndex` to `thisIndex`. The `setState()` function that is returned creates a closure around `thisIndex`. This means that if our `useState()` hook is called three times within a component, we'll get three different pieces of state, each with their own setter function, pointing to the correct index in the array. Finally, after our component has rendered, `currentIndex` is set back to 0, ready for the next call to `render()`.
 
 
-If you're interested in understanding this better (or you would like examples of how other hooks work), then you should definitely check out Shawn Wang's post and video at https://www.swyx.io/getting-closure-on-hooks/, which is what this code was, uh, heavily inspired by.
+If you're interested in understanding this better (or you would like examples of how other hooks work), then you should definitely check out [Shawn Wang's post and video on hooks](https://www.swyx.io/getting-closure-on-hooks/), which is what this code was, uh, heavily inspired by.
 
  th object contain
 __Testing Hooks__
@@ -386,9 +385,8 @@ Hopefully, all of this has given you a better understanding of how hooks work, a
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE3OTk3ODUzNjUsMzE2MjA1ODkxLDQ1NT
-A0NjAsMTk2NjQ3MjkwOCw5MTc5MzQyOTIsNjQxMjYxNDU4LC05
-MzUyMjY1MiwtMTQwMDQ3Mjk2MSwxMTcwNzU4NzkxLDgxMjE1OT
-k5Nyw1NDQxNDEyNjQsMTU1Nzk0NjczNywxNzc5OTQ4MDk5XX0=
-
+eyJoaXN0b3J5IjpbNDM2MDc0NDQ3LDMxNjIwNTg5MSw0NTUwND
+YwLDE5NjY0NzI5MDgsOTE3OTM0MjkyLDY0MTI2MTQ1OCwtOTM1
+MjI2NTIsLTE0MDA0NzI5NjEsMTE3MDc1ODc5MSw4MTIxNTk5OT
+csNTQ0MTQxMjY0LDE1NTc5NDY3MzcsMTc3OTk0ODA5OV19
 -->
