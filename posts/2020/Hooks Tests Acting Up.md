@@ -303,9 +303,7 @@ it('doesn\'t change anything when the API returns', async () => {
    expect(form).toBeTruthy()
 }
 ```
-Another common scenario is needing to wait for an element to disappear. 
-
-If we had found ourselves in a situation where we needed to wait for an element to *disappear*, rather than appear, we also have the option to use `waitForElementToBeRemoved()`. 
+Another common scenario is needing to wait for an element to disappear. For example, waiting for a loading spinner to disappear can be a good way to wait until an API call returns, without needing to know exactly what is going to appear on the page. In these cases, we can use `waitForElementToBeRemoved()`
 
 ```js
 it('shows Zelda', async () => {
@@ -379,8 +377,9 @@ Hopefully, all of this has given you a better understanding of how hooks work, a
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMzAxMTg4MTM4LDMxNjIwNTg5MSw0NTUwND
-YwLDE5NjY0NzI5MDgsOTE3OTM0MjkyLDY0MTI2MTQ1OCwtOTM1
-MjI2NTIsLTE0MDA0NzI5NjEsMTE3MDc1ODc5MSw4MTIxNTk5OT
-csNTQ0MTQxMjY0LDE1NTc5NDY3MzcsMTc3OTk0ODA5OV19
+eyJoaXN0b3J5IjpbLTEwOTQwNjgzMzEsMzE2MjA1ODkxLDQ1NT
+A0NjAsMTk2NjQ3MjkwOCw5MTc5MzQyOTIsNjQxMjYxNDU4LC05
+MzUyMjY1MiwtMTQwMDQ3Mjk2MSwxMTcwNzU4NzkxLDgxMjE1OT
+k5Nyw1NDQxNDEyNjQsMTU1Nzk0NjczNywxNzc5OTQ4MDk5XX0=
+
 -->
