@@ -324,7 +324,7 @@ const submitForm = async () => {
 ```
 This is a utility function we use in some tests. It submits a form which triggers an API call. We could wait for the API call to return, and then wait for some change in the DOM, but often we don't really care about the returned result. For example, if we were testing that the form reset itself after submission - there are no DOM changes, only changes to the values of the form elements. In this case, we found using `act()` to be the simplest and clearest way to ensure all our async code executed correctly.
 
-One small word of warning though - if the warning is turning up as a result of a call to `render()` or `renderHook()`, then wrapping it in `act()` isn't going to help, as the call is already wrapped in `act()`. This happens to me a lot when I have a component which makes an API call as soon as it loads. If I call `render()` inside of `beforeEach()`
+One small word of warning though - if the warning is turning up as a result of a call to `render()` or `renderHook()`, then wrapping it in `act()` isn't going to help, as the call is already wrapped in `act()`. This happens to me a lot when I have a component which makes an API call as soon as it loads. If I call `render()` inside of `beforeEach()`, `beforeEach()` returns before the API call has returned, triggering the warning. This is especially frustrating because the tests all work fine when I call `render()` inside each test - the warning only appears after I refactor my code to use `beforeEach()`! In these cases, I usually
 
  This happens to me a lot when I put my call to `render()` in a `beforeEach()`, which is rendering a component that makes an API call as soon as it is created. This is especially frustrating as the warning doesn't appear when the call to `render()` is inside the test - it turns up when I refactor all my passing tests to have the common `render()` code in a `beforeEach()`!  In these cases, you'll need to use `waitFor()` or `waitForElementToBeRemoved()` to deal with the warning.
 
@@ -379,9 +379,9 @@ Hopefully, all of this has given you a better understanding of how hooks work, a
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTExNzMyNDA5NDcsMzE2MjA1ODkxLDQ1NT
-A0NjAsMTk2NjQ3MjkwOCw5MTc5MzQyOTIsNjQxMjYxNDU4LC05
-MzUyMjY1MiwtMTQwMDQ3Mjk2MSwxMTcwNzU4NzkxLDgxMjE1OT
-k5Nyw1NDQxNDEyNjQsMTU1Nzk0NjczNywxNzc5OTQ4MDk5XX0=
+eyJoaXN0b3J5IjpbMTM4MjUwMDcwNywzMTYyMDU4OTEsNDU1MD
+Q2MCwxOTY2NDcyOTA4LDkxNzkzNDI5Miw2NDEyNjE0NTgsLTkz
+NTIyNjUyLC0xNDAwNDcyOTYxLDExNzA3NTg3OTEsODEyMTU5OT
+k3LDU0NDE0MTI2NCwxNTU3OTQ2NzM3LDE3Nzk5NDgwOTldfQ==
 
 -->
