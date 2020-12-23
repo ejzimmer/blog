@@ -332,10 +332,9 @@ __tl;dr__
 So, what did we learn?
 - Hooks are made of closures and rely on the component lifecycle to work correctly. As a result, we need to use something like `renderHook()` to test them.
 - Async code executing after a test has finished will result in a warning being thrown. This is a Good Thing as it helps ensure that we're testing exactly what we intend to test.
-- `await waitForNextUpdate()` will pause a test until the test component is re-rendered, ensuring any async callbacks have run
+- `await waitForNextUpdate()` will pause a test until the test component is re-rendered, giving any async callbacks a chance to run.
 - `await waitFor(...)` will wait until a specific condition has been met. We can wait for anything, but the most common use cases are waiting for a DOM element to appear, or waiting for a specific function (like `Axios.get`) to have been called. We can also `await waitForElementToBeRemoved(...)`
-- sometimes, it really is best to just do what the warning says and wrap the code in `act()`, but this isn't always going to work
-
+- sometimes, it really is best to just do what the warning says and wrap the code in `act()`. This is most useful in cases where our actions have side effects that we don't care about.
 
 Hopefully, all of this has given you a better understanding of how hooks work, and will help you avoid pesky warnings in your tests in the future!
 
@@ -377,9 +376,8 @@ Hopefully, all of this has given you a better understanding of how hooks work, a
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTEwNDQwOTU3MTUsMzE2MjA1ODkxLDQ1NT
-A0NjAsMTk2NjQ3MjkwOCw5MTc5MzQyOTIsNjQxMjYxNDU4LC05
-MzUyMjY1MiwtMTQwMDQ3Mjk2MSwxMTcwNzU4NzkxLDgxMjE1OT
-k5Nyw1NDQxNDEyNjQsMTU1Nzk0NjczNywxNzc5OTQ4MDk5XX0=
-
+eyJoaXN0b3J5IjpbOTU2NzY2OTk0LDMxNjIwNTg5MSw0NTUwND
+YwLDE5NjY0NzI5MDgsOTE3OTM0MjkyLDY0MTI2MTQ1OCwtOTM1
+MjI2NTIsLTE0MDA0NzI5NjEsMTE3MDc1ODc5MSw4MTIxNTk5OT
+csNTQ0MTQxMjY0LDE1NTc5NDY3MzcsMTc3OTk0ODA5OV19
 -->
