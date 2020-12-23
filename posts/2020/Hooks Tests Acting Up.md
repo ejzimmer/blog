@@ -162,7 +162,7 @@ Well. Initially, we call `renderHook()`, which calls `useCounter()`, which retur
 ![initial state](https://raw.githubusercontent.com/ejzimmer/blog/master/posts/2020/images/initial_state.png)
 Our test then calls `incrementCount()`, which updates the state. Updating the state causes the fake test component to re-render, which calls `useCounter()` again. The return value of `useCounter()` now points to the updated `count` value of 1.
 
-![after increment](https://raw.githubusercontent.com/ejzimmer/blog/master/posts/2020/images/i.png
+![after increment](https://raw.githubusercontent.com/ejzimmer/blog/master/posts/2020/images/after_increment.png)
 
 
  Calling `incrementCount()` updates the state, and causes `renderHook()`'s fake test component to re-render. Re-rendering calls the `useCounter()` hook again, which returns an updated value for `count` of 1. But there's no way to pass this value back from the component to our test, so it just disappears into the ether. Our test is stuck with its initial `count` value of 0, and everything consequently fails. 
@@ -402,7 +402,7 @@ Hopefully, all of this has given you a better understanding of how hooks work, a
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE4MDQ0MDk4OTksMTE3MDc1ODc5MSw4MT
+eyJoaXN0b3J5IjpbLTE0MDA0NzI5NjEsMTE3MDc1ODc5MSw4MT
 IxNTk5OTcsNTQ0MTQxMjY0LDE1NTc5NDY3MzcsMTc3OTk0ODA5
 OV19
 -->
