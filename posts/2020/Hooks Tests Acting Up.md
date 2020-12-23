@@ -1,6 +1,5 @@
 A co-worker and I were writing tests for a hook we'd created the other day, and we kept running into this mysterious warning.
 
-
 ```
     Warning: An update to TestHook inside a test was not wrapped in act(...).
     
@@ -16,24 +15,19 @@ A co-worker and I were writing tests for a hook we'd created the other day, and 
         in Suspense
 ```
 
-
 We didn't find this warning particularly enlightening, especially given that a cursory reading of the linked documentation reveals
 ```
 You might find using act() directly a bit too verbose. To avoid some of the boilerplate, you could use a library like React Testing Library, whose helpers are wrapped with act().
 ```
 
-We were using React Testing Library! Everything should be wrapped in `act()` already! And our tests were actually passing. It was a bit of a mystery, so we decided to dig a little deeper and work out what was really going on. What resulted was a wild ride through the inner workings of hooks, testing utilities, and how asynchronous events are handled in JavaScript. If you're curious too, then keep reading. If you just want to know how to make the warning go away, then skip ahead to the tl;dr.
-
+We were using React Testing Library! Everything was already wrapped in `act()`! And our tests were actually passing. It was a bit of a mystery, so we decided to dig a little deeper and work out what was really going on. What resulted was a wild ride through the inner workings of hooks, testing utilities, and how asynchronous events are handled in JavaScript. If you're curious too, then keep reading. If you just want to know how to make the warning go away, then skip ahead to the tl;dr.
 
 __Hooks__
 This warning is very specifically related to hooks, so to understand what's going on, we first need to understand how hooks work.
 
-
-Hooks give us a way to store state in a functional component. In the case of `useState()`, that state is the actual component state. But other hooks store other kinds of state - `useRef()` stores a reference to a particular object, while `useEffect()` and `useCallback()` store functions. We can't store these things inside the component - they'd get re-created as new objects each time the component rendered and the component function ran. But we also don't want to store them in global state, where anyone could just come along and change them.
-
+Hooks give us a way to store state in a functional component. In the case of `useState()`, that state is the actual component state. But other hooks store other kinds of state - `useRef()` stores a reference to a particular object, while `useEffect()` and `useCallback()` store functions. We can't store these things inside the component - they'd get re-created as new objects each time the component re-rendered. But we also don't want to store them in global state, where anyone could just come along and change them.
 
 Fortunately, JavaScript has a nice way to create private state specific to a particular function. We can use closures!
-
 
 ```js
 function counter() {
@@ -44,14 +38,13 @@ function counter() {
    }
 }
 
-
 const myCounter = counter()
 console.log(myCounter.current()) // 0
 myCounter.increment()
 console.log(myCounter.current()) // 1
 console.log(_count) // undefined
 ```
-Here, the `counter()` function stores its internal state in a variable called `_count`. It also returns an object with two functions on it - `increment()` and `count()`. Because `_count` is defined outside of `increment()` and `current()`, both functions share the same value, and the that value is maintained independent of calls to either function. And, because `_count` is defined inside `counter()`, nothing outside `counter()` can access it. This is  we want in a hook!
+Here, the `counter()` function stores its internal state in a variable called `_count`. It also returns an object with two functions on it - `increment()` and `count()`. Because `_count` is defined outside of `increment()` and `current()`, both functions share the same value, and that value is maintained independent of calls to either function. And, because `_count` is defined inside `counter()`, nothing outside `counter()` can access it. This is  we want in a hook!
 
 
 (If this seems confusing, have a look at [the MDN guide to closures](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Closures), or the td chaptean c in [Kyle Simpson's excellent You Don't Know JS Yet](https://github.com/getify/You-Dont-Know-JS/blob/2nd-ed/scope-closures/README.md))
@@ -398,8 +391,9 @@ Hopefully, all of this has given you a better understanding of how hooks work, a
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTMzMjUzNzE3LDMxNjIwNTg5MSw0NTUwND
-YwLDE5NjY0NzI5MDgsOTE3OTM0MjkyLDY0MTI2MTQ1OCwtOTM1
-MjI2NTIsLTE0MDA0NzI5NjEsMTE3MDc1ODc5MSw4MTIxNTk5OT
-csNTQ0MTQxMjY0LDE1NTc5NDY3MzcsMTc3OTk0ODA5OV19
+eyJoaXN0b3J5IjpbLTIwOTkxMTAxMTEsMzE2MjA1ODkxLDQ1NT
+A0NjAsMTk2NjQ3MjkwOCw5MTc5MzQyOTIsNjQxMjYxNDU4LC05
+MzUyMjY1MiwtMTQwMDQ3Mjk2MSwxMTcwNzU4NzkxLDgxMjE1OT
+k5Nyw1NDQxNDEyNjQsMTU1Nzk0NjczNywxNzc5OTQ4MDk5XX0=
+
 -->
