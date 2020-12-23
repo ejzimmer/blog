@@ -179,23 +179,9 @@ it('increments the counter', () => {
     expect(result.current.count).toBe(1) // now this works too!
 })
 ```
-Of course, in the real world, `renderHook()` involves one more layer of indirection. Rather than just returning a `result` object, it returns an object with a `result` property. The reason for this is much more straighforward though - `renderHook()` returns a bunch of utility functions along with the result, so they all need to be batched up in an object together.
-
-SHOW WHAT IS ACTUALLY RETURNED
-ing `current`, our test has access to the updated value, and our test passes!
-
-```js
-it('increments the counter', () => {
-    const result = renderHook(() => useCounter())
-    expect(result.current.count).toBe(0) // all good, just like before
-    result.current.incrementCount() // the value of `current` is updated
-    expect(result.current.count).toBe(1) // now this works too!
-})
-```
 
 __The Act Warning__
-This - finally - brings us to the warning that started this whole thingjourney. 
-
+This - finally - brings us to the warning that started this whole journey. 
 
 ```
 Warning: An update to TestHook inside a test was not wrapped in act(...).
@@ -212,17 +198,13 @@ Warning: An update to TestHook inside a test was not wrapped in act(...).
         in Suspense
 ```
 
-
 As I mentioned earlier, this is particularly confusing because the docs clearly state that both `render()` and `renderHook()` already wrap the code in `act()`.
-
 
 So what's going on?
 
-
 Well, one hint is that you're only going to see this warning if your hook is doing something asynchronous - like calling an API, or using a timer. If your hook uses `async/await`, or does something in the `then()` of a promise, or a `setTimeout()` callback, it's potentially going to cause a problem. This is due to the way that JavaScript manages these asynchronous events. 
 
-
-Imagine we had a hook for fetching details about Nintendo Amiibo:.
+Imagine we had a hook for fetching details about Nintendo Amiibo:
 ```js
 function useAmiibo(name) {
    const [amiibo, setAmiibo] = useState()
@@ -233,8 +215,7 @@ function useAmiibo(name) {
    return amiibo
 }
 ```
-(This is a real API; you can call it if you like)
-
+(This is a real API; you can call it if you like. Amiibo are figurines used in various Nintendo games.)
 
 We can test it with a test like this:
 
@@ -410,7 +391,7 @@ Hopefully, all of this has given you a better understanding of how hooks work, a
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTYxNzMwMzgwNCwxOTY2NDcyOTA4LDkxNz
+eyJoaXN0b3J5IjpbMTA2NTg1Njk1OCwxOTY2NDcyOTA4LDkxNz
 kzNDI5Miw2NDEyNjE0NTgsLTkzNTIyNjUyLC0xNDAwNDcyOTYx
 LDExNzA3NTg3OTEsODEyMTU5OTk3LDU0NDE0MTI2NCwxNTU3OT
 Q2NzM3LDE3Nzk5NDgwOTldfQ==
