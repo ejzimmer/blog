@@ -134,15 +134,13 @@ it('returns the initial value', () => {
 })
 ```
 
-
 We pass `renderHook()` a callback function which calls our hook. `renderHook()` generates a test component, which calls the callback function from within it. This results in our hook being called from within a component, without us having to go to all the hassle of creating a component ourselves!
 
-`renderHook()` returns an object wh a property called `result`. The `result` object has anotherith a property called `current`, which contains the result of calling our callback.
+`renderHook()` returns an object with a property called `result`. The `result` object has a property called `current`, which contains the result of calling our callback.
 
 This might seem like a rather convoluted way of going about things, but there's a very good reason for it. `result.current` will always point to the value returned by the hook, even if that value changes after `renderHook()` has returned. This allows us to test hooks which are able to change their own state.
 
-
-To understand what's going on, lets imagine that `renderHook()` just returnedn `incrementCount()` `result
+To understand what's going on, lets imagine that `renderHook()` just returned the value returned by `useCounter()`.
 
 ```js
 it('increments the counter', () => {
@@ -182,6 +180,15 @@ it('increments the counter', () => {
 ```
 
 Of course, in the Real World, things are slightly more complicated than this - `renderHook()` actually returns an object with a property called `result`, which contains an object with a property called `current`. So our test really looks like this:
+```js
+it('increments the counter', () => {
+    const { result } = renderHook(() => useCounter())
+    expect(result.current.count).toBe(0) // all good, just like before
+    result.current.incrementCount() // the value of `current` is updated
+    expect(result.current.count).toBe(1) // now this works too!
+})
+```
+Fortunately, the reason for this extra
 
 
 __The Act Warning__
@@ -391,7 +398,7 @@ Hopefully, all of this has given you a better understanding of how hooks work, a
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMzAxNzk0MjUwLDMxNjIwNTg5MSw0NTUwND
+eyJoaXN0b3J5IjpbLTMzMjUzNzE3LDMxNjIwNTg5MSw0NTUwND
 YwLDE5NjY0NzI5MDgsOTE3OTM0MjkyLDY0MTI2MTQ1OCwtOTM1
 MjI2NTIsLTE0MDA0NzI5NjEsMTE3MDc1ODc5MSw4MTIxNTk5OT
 csNTQ0MTQxMjY0LDE1NTc5NDY3MzcsMTc3OTk0ODA5OV19
