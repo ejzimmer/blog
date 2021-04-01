@@ -4,6 +4,7 @@ title: Hooks Tests Acting Up
 date: 2021-03-31
 tags: ['post', 'react']
 ---
+# Hooks Tests Acting Up
 
 A co-worker and I were writing tests for a hook we'd created the other day, and we kept running into this mysterious warning.
 
@@ -29,7 +30,7 @@ You might find using act() directly a bit too verbose. To avoid some of the boil
 
 We were using React Testing Library! Everything was already wrapped in `act()`! And our tests were actually passing. It was a bit of a mystery, so we decided to dig a little deeper and work out what was really going on. What resulted was a wild ride through the inner workings of hooks, testing utilities, and how asynchronous events are handled in JavaScript. If you're curious too, then keep reading. If you just want to know how to make the warning go away, then skip ahead to the tl;dr.
 
-__Hooks__
+## Hooks
 This warning is very specifically related to hooks, so to understand what's going on, we first need to understand how hooks work.
 
 Hooks give us a way to store state in a functional component. In the case of `useState()`, that state is the actual component state. But other hooks store other kinds of state - `useRef()` stores a reference to a particular object, while `useEffect()` and `useCallback()` store functions. We can't store these things inside the component - they'd get re-created as new objects each time the component re-rendered. But we also don't want to store them in global state, where anyone could just come along and change them.
@@ -115,7 +116,7 @@ Now that our state is in an array, we also need `currentIndex` to keep track of 
 
 If you're interested in understanding this better (or you would like examples of how other hooks work), then you should definitely check out [Shawn Wang's post and video on hooks](https://www.swyx.io/getting-closure-on-hooks/), which is what this code was, uh, heavily inspired by.
 
-__Testing Hooks__
+## Testing Hooks
 One thing that this code hopefully makes clear is that a hook will really only work if it's called from within the context of a component function (as per the [Rules of Hooks](https://reactjs.org/docs/hooks-rules.html)). Hooks within a function need to be called in the correct order, so that `currentIndex` is incremented correctly, and `currentIndex` needs to be reset after each render. This means that we can't test hooks just by calling them like regular JavaScript functions. Instead, we need to use something like `renderHook()`.
 
 ```js
@@ -184,7 +185,7 @@ Fortunately, the reason for this extra bit of indirection is nowhere near as com
 const { result, rerender, unmount, ...asynUtils } = renderHook(...)
 ```
 
-__The Act Warning__
+## The Act Warning
 This - finally - brings us to the warning that started this whole journey. 
 
 ```
@@ -253,7 +254,7 @@ This test will pass. But it's not really testing the right thing. If an error wa
 If you're interested in the details of how JavaScript handles asynchronous code and promises, check out Jake Archibald's article on [https://jakearchibald.com/2015/tasks-microtasks-queues-and-schedules/](Tasks, microtasks, queues and schedules). Or you can watch a [https://www.youtube.com/watch?v=2qDNgBgKsXI](video of me, talking about the Event Loop).
 
 
-__Can we fix it?__
+## Can we fix it?
 Yes, we can, and the fix is actually pretty straightforward. One of the utility functions returned by `renderHook()` is a function called `waitForNextUpdate()` which returns a Promise that resolves the next time our hook is called.
 
 ```js
@@ -265,7 +266,7 @@ it('fetches Zelda', async () => {
 ```
 Now, the test will pause after the hook is rendered. It will wait until the asynchronous `fetch` code returns and the state inside the hook is updated. Then, the test component will re-render, calling our hook again. Finally, the test will resume, using the updated value of `amiibo`, and this time, it will pass!
 
-__One last problem__
+## One last problem
 While we've now solved the issue of testing our hook, we are left with one last little problem - testing a component that uses our hook. 
 
 
@@ -335,7 +336,7 @@ One small word of warning though - if the warning is turning up as a result of a
 
 Finally, if you're wondering why the function is named "act",  and you've made it this far, well, I'd hate for you to leave disappointed. "Act" comes from the "prepare, act, assert" testing pattern - it's equivalent to the "when" in "given, when then", if you're more familiar with that nomenclature. 
 
-__tl;dr__
+## tl;dr
 So, what did we learn?
 - Hooks are made of closures and rely on the component lifecycle to work correctly. As a result, we need to use something like `renderHook()` to test them.
 - Async code executing after a test has finished will result in a warning being thrown. This is a Good Thing as it helps ensure that we're testing exactly what we intend to test.

@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ez.codes blog</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="icon" href="/css/favicon.ico">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Mulish&family=Raleway&display=swap" rel="stylesheet"> 
+  
+</head>
+<body>
+  <main><h1>Hooks Tests Acting Up</h1>
+<p>A co-worker and I were writing tests for a hook we'd created the other day, and we kept running into this mysterious warning.</p>
+<pre><code>    Warning: An update to TestHook inside a test was not wrapped in act(...).
+    
+    When testing, code that causes React state updates should be wrapped into act(...):
+    
+    act(() =&gt; {
+      /* fire events that update state */
+    });
+    /* assert on the output */
+    
+    This ensures that you're testing the behavior the user would see in the browser. Learn more at https://fb.me/react-wrap-tests-with-act
+        in TestHook
+        in Suspense
+</code></pre>
+<p>We didn't find this warning particularly enlightening, especially given that a cursory reading of the linked documentation reveals</p>
+<pre><code>You might find using act() directly a bit too verbose. To avoid some of the boilerplate, you could use a library like React Testing Library, whose helpers are wrapped with act().
+</code></pre>
+<p>We were using React Testing Library! Everything was already wrapped in <code>act()</code>! And our tests were actually passing. It was a bit of a mystery, so we decided to dig a little deeper and work out what was really going on. What resulted was a wild ride through the inner workings of hooks, testing utilities, and how asynchronous events are handled in JavaScript. If you're curious too, then keep reading. If you just want to know how to make the warning go away, then skip ahead to the tl;dr.</p>
+<h2>Hooks</h2>
+<p>This warning is very specifically related to hooks, so to understand what's going on, we first need to understand how hooks work.</p>
+<p>Hooks give us a way to store state in a functional component. In the case of <code>useState()</code>, that state is the actual component state. But other hooks store other kinds of state - <code>useRef()</code> stores a reference to a particular object, while <code>useEffect()</code> and <code>useCallback()</code> store functions. We can't store these things inside the component - they'd get re-created as new objects each time the component re-rendered. But we also don't want to store them in global state, where anyone could just come along and change them.</p>
+<p>Fortunately, JavaScript has a nice way to create private state specific to a particular function. We can use closures!</p>
+<pre><code class="language-js">function counter() {
+    let _count = 0;
+    return {
+        increment: () =&gt; ++_count,
+        current: () =&gt; _count
+   }
+}
+
+const myCounter = counter()
+console.log(myCounter.current()) // 0
+myCounter.increment()
+console.log(myCounter.current()) // 1
+console.log(_count) // undefined
+</code></pre>
+<p>Here, the <code>counter()</code> function stores its internal state in a variable called <code>_count</code>. It also returns an object with two functions on it - <code>increment()</code> and <code>count()</code>. Because <code>_count</code> is defined outside of <code>increment()</code> and <code>current()</code>, both functions share the same value, and that value is maintained independent of calls to either function. And, because <code>_count</code> is defined inside <code>counter()</code>, nothing outside <code>counter()</code> can access it. This is  we want in a hook!</p>
+<p>(If this seems confusing, have a look at <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Closures">the MDN guide to closures</a>, or <a href="https://github.com/getify/You-Dont-Know-JS/blob/2nd-ed/scope-closures/README.md">the chapter on scope and closures in Kyle Simpson's excellent You Don't Know JS Yet</a>)</p>
+<p>If we were to have a go at defining the <code>useState()</code> hook, it might look something like this</p>
+<pre><code class="language-js">function React() {
+  let _state
+  return {
+    useState: (initial) =&gt; {
+      _state = _state || initial // if _state hasn't been set to anything, set it to the initial value
+      setState = (newState) =&gt; _state = newState
+
+      return [_state, setState]
+    }
+    // ... everything else React does
+  }
+}
+</code></pre>
+<p>This version of <code>useState</code> gives us exactly what we wanted - an external place to store state that isn't accessible to every other bit of code running on the page. It does, however, have a serious downside. It can only store one bit of state. If our component called <code>useState</code> multiple times, each new bit of state would overwrite the previous one.</p>
+<p>We can solve the only-one-bit-of-state problem by replacing the <code>_state</code> variable with an <em>array</em> of state values. Once we do this, we also need to add some logic to control which index of the array we should be accessing at any given time.</p>
+<pre><code class="language-js">function React() {
+  const _state = []
+  let currentIndex = 0
+  return {
+    useState: (initial) =&gt; {
+      // access the bit of state at the current index
+      _state[currentIndex] = _state[currentIndex] || initial
+
+      // make sure that we always use the same index for this particular bit of state
+      // (by creating another closure!)
+      const thisIndex = currentIndex
+      setState = (newState) =&gt; _state[thisIndex] = newState
+
+      // increment currentIndex so that the next hook accesses the next element in the array
+      currentIndex++
+      
+      // return our bit of state, and a function to update it. This setState function will always
+      // point to the correct element in the array, because we created a closure using thisIndex
+      return [_state[thisIndex], setState]
+    }
+    render: () =&gt; {
+       // ... actually render the component
+       
+       // once the component has rendered, set current index back to 0, so we're
+       // ready for the next time the component runs
+       currentIndex = 0
+    }
+    // ... whatever else React does
+  }
+}
+</code></pre>
+<p>Now that our state is in an array, we also need <code>currentIndex</code> to keep track of where each bit of state is stored within the array. Each time <code>useState()</code> is called, it saves the current value of <code>currentIndex</code> to <code>thisIndex</code>. The <code>setState()</code> function that is returned creates a closure around <code>thisIndex</code>. This means that if our <code>useState()</code> hook is called three times within a component, we'll get three different pieces of state, each with their own setter function, pointing to the correct index in the array. Finally, after our component has rendered, <code>currentIndex</code> is set back to 0, ready for the next call to <code>render()</code>.</p>
+<p>If you're interested in understanding this better (or you would like examples of how other hooks work), then you should definitely check out <a href="https://www.swyx.io/getting-closure-on-hooks/">Shawn Wang's post and video on hooks</a>, which is what this code was, uh, heavily inspired by.</p>
+<h2>Testing Hooks</h2>
+<p>One thing that this code hopefully makes clear is that a hook will really only work if it's called from within the context of a component function (as per the <a href="https://reactjs.org/docs/hooks-rules.html">Rules of Hooks</a>). Hooks within a function need to be called in the correct order, so that <code>currentIndex</code> is incremented correctly, and <code>currentIndex</code> needs to be reset after each render. This means that we can't test hooks just by calling them like regular JavaScript functions. Instead, we need to use something like <code>renderHook()</code>.</p>
+<pre><code class="language-js">it('returns the initial value', () =&gt; {
+    const { result } = renderHook(() =&gt; useCounter())
+    expect(result.current.count).toBe(0)
+})
+</code></pre>
+<p>We pass <code>renderHook()</code> a callback function which calls our hook. <code>renderHook()</code> generates a test component, which calls the callback function from within it. This results in our hook being called from within a component, without us having to go to all the hassle of creating a component ourselves!</p>
+<p><code>renderHook()</code> returns an object with a property called <code>result</code>. The <code>result</code> object has a property called <code>current</code>, which contains the result of calling our callback.</p>
+<p>This might seem like a rather convoluted way of going about things, but there's a very good reason for it. <code>result.current</code> will always point to the value returned by the hook, even if that value changes after <code>renderHook()</code> has returned. This allows us to test hooks which are able to change their own state.</p>
+<p>To understand what's going on, lets imagine that <code>renderHook()</code> just returned the value returned by <code>useCounter()</code>.</p>
+<pre><code class="language-js">it('increments the counter', () =&gt; {
+    const result = renderHook(() =&gt; useCounter())
+    const { count, incrementCount } = result
+    expect(count).toBe(0) // all good!
+    incrementCount()
+    expect(count).toBe(1) // oh noes, even though the hook has updated the state of the variable in its closure
+                          // _this_ count variable still points to the initial value of 0, and the test fails!
+})
+</code></pre>
+<p>Our test fails! But why?</p>
+<p>Well. Initially, we call <code>renderHook()</code>, which calls <code>useCounter()</code>. <code>useCounter()</code> returns an object with a <code>count</code> property with a value of 0, and a setter function, which can be used to increment the value of <code>count</code>. This object is returned by <code>renderHook()</code> and stored in <code>result</code> in our test.</p>
+<p><img src="https://raw.githubusercontent.com/ejzimmer/blog/master/posts/2020/images/initial_state.png" alt="initial state">
+Our test then calls <code>incrementCount()</code>, which updates the state of the fake test component. Updating the state causes the component to re-render, which calls <code>useCounter()</code> again. <code>useCounter()</code> returns a new object, with the value of <code>count</code> set to 1.</p>
+<p><img src="https://raw.githubusercontent.com/ejzimmer/blog/master/posts/2020/images/after_increment.png" alt="after increment">
+There's no way for <code>useCounter()</code> to pass this new object back to our test, so <code>result</code> continues to point to the original object, and our test fails.</p>
+<p>To solve this problem, <code>renderHook()</code> can instead return an object with a <code>current</code> property.</p>
+<p><img src="https://raw.githubusercontent.com/ejzimmer/blog/master/posts/2020/images/actual.png" alt="after increment">
+Now, when we call <code>incrementCount()</code>, the fake test component re-renders, and stores the new result returned by <code>useCounter()</code> in the <code>current</code> property.</p>
+<p><img src="https://raw.githubusercontent.com/ejzimmer/blog/master/posts/2020/images/actual_after_increment.png" alt="after increment">
+So now our test always has access to the most recent value returned by <code>useCounter()</code>, and it passes!</p>
+<pre><code class="language-js">it('increments the counter', () =&gt; {
+    const result = renderHook(() =&gt; useCounter())
+    expect(result.current.count).toBe(0) // all good, just like before
+    result.current.incrementCount() // the value of `current` is updated
+    expect(result.current.count).toBe(1) // now this works too!
+})
+</code></pre>
+<p>Of course, in the Real World, things are slightly more complicated than this - <code>renderHook()</code> actually returns an object with a property called <code>result</code>, which contains an object with a property called <code>current</code>. So our test really looks like this:</p>
+<pre><code class="language-js">it('increments the counter', () =&gt; {
+    const { result } = renderHook(() =&gt; useCounter())
+    expect(result.current.count).toBe(0) // all good, just like before
+    result.current.incrementCount() // the value of `current` is updated
+    expect(result.current.count).toBe(1) // now this works too!
+})
+</code></pre>
+<p>Fortunately, the reason for this extra bit of indirection is nowhere near as complicated as the first bit. <code>renderHook()</code> also needs to return a couple of utility functions, for doing things like forcing the test component to re-render, unmounting the test component (so we can test our clean-up code), and some other utilities that we'll talk about later. Bundling them up in a single object along with the result is just convenient.</p>
+<pre><code class="language-js">const { result, rerender, unmount, ...asynUtils } = renderHook(...)
+</code></pre>
+<h2>The Act Warning</h2>
+<p>This - finally - brings us to the warning that started this whole journey.</p>
+<pre><code>Warning: An update to TestHook inside a test was not wrapped in act(...).
+    
+    When testing, code that causes React state updates should be wrapped into act(...):
+    
+    act(() =&gt; {
+      /* fire events that update state */
+    });
+    /* assert on the output */
+    
+    This ensures that you're testing the behavior the user would see in the browser. Learn more at https://fb.me/react-wrap-tests-with-act
+        in TestHook
+        in Suspense
+</code></pre>
+<p>As I mentioned earlier, this is particularly confusing because the docs clearly state that both <code>render()</code> and <code>renderHook()</code> already wrap the code in <code>act()</code>.</p>
+<p>So what's going on?</p>
+<p>Well, one hint is that we're only going to see this warning if our hook is doing something asynchronous - like calling an API, or using a timer. If our hook uses <code>async/await</code>, or does something in the <code>then()</code> of a promise, or a <code>setTimeout()</code> callback, it's potentially going to cause a problem. This is because of how JavaScript manages these asynchronous events.</p>
+<p>Imagine we had a hook for fetching details about Nintendo amiibo:</p>
+<pre><code class="language-js">function useAmiibo(name) {
+   const [amiibo, setAmiibo] = useState()
+   fetch(`https://www.amiiboapi.com/api/amiibo/?name=${name}`)
+    .then((response) =&gt; response.json())
+    .then((response) =&gt; setAmiibo(response))
+    
+   return amiibo
+}
+</code></pre>
+<p>(This is a real API; you can call it if you like. Amiibo are figurines used in various Nintendo games.)</p>
+<p>We can test it with a test like this:</p>
+<pre><code class="language-js">it('fetches the Zelda amiibo', () =&gt;  {
+    const { result } = renderHook(() =&gt; useAmiibo(name))
+    expect(result.current.amiibo[0].gameSeries.toBe('The Legend of Zelda')
+})
+</code></pre>
+<p>The code will run in the following order:</p>
+<ol>
+<li><code>renderHook(() =&gt; useAmiibo(name))</code> in the test</li>
+<li><code>renderHook()</code> internal code, which calls <code>useAmiibo()</code></li>
+<li><code>const [amiibo, setAmiibo] = useState()</code> in <code>useAmiibo()</code></li>
+<li><code>fetch(...)</code> in <code>useAmiibo()</code></li>
+</ol>
+<p>At this point, <code>fetch()</code> will send off the network request, and <code>useAmiibo()</code> will return the <code>amiibo</code> object (which currently has a value of <code>undefined</code>). The final line of the test will run, and the test will fail, because <code>result.current</code> currently points to an <code>undefined</code> <code>amiibo</code>.</p>
+<p><em>After</em> the test has returned, the <code>then()</code> blocks of the hook will run. <code>renderHook()</code> will notice that the state changed after the test finished, and it will throw that pesky warning.</p>
+<p>In this case, the warning isn't very helpful, because the test fails. We already know something has gone wrong. The warning is really there to guard against tests <em>passing</em> incorrectly. Imagine if we had a test that checked that an error wasn't thrown.</p>
+<pre><code class="language-js">it('fetches nothing', () =&gt; {
+    expect(renderHook(() =&gt; useAmiibo(name))).not.toThrow()
+})
+</code></pre>
+<p>This test will pass. But it's not really testing the right thing. If an error was thrown in the <code>then()</code> part of our hook, it wouldn't be thrown until <em>after</em> the test had already returned successfully. The <code>act()</code> warning is warning us about situations like this - cases when an asynchronous action would have caused something to happen <em>after</em> the test had already finished. Hopefully you agree that while the wording of the warning is a little confusing, the warning itself is potentially very helpful. After all, reasoning about asynchronous stuff is <em>hard</em>.</p>
+<p>If you're interested in the details of how JavaScript handles asynchronous code and promises, check out Jake Archibald's article on [https://jakearchibald.com/2015/tasks-microtasks-queues-and-schedules/](Tasks, microtasks, queues and schedules). Or you can watch a [https://www.youtube.com/watch?v=2qDNgBgKsXI](video of me, talking about the Event Loop).</p>
+<h2>Can we fix it?</h2>
+<p>Yes, we can, and the fix is actually pretty straightforward. One of the utility functions returned by <code>renderHook()</code> is a function called <code>waitForNextUpdate()</code> which returns a Promise that resolves the next time our hook is called.</p>
+<pre><code class="language-js">it('fetches Zelda', async () =&gt; {
+    const { result, waitForNextUpdate } = renderHook(() =&gt; useAmiibo(name))
+    await waitForNextUpdate()
+    expect(result.current.amiibo[0].gameSeries.toBe('The Legend of Zelda')
+}
+</code></pre>
+<p>Now, the test will pause after the hook is rendered. It will wait until the asynchronous <code>fetch</code> code returns and the state inside the hook is updated. Then, the test component will re-render, calling our hook again. Finally, the test will resume, using the updated value of <code>amiibo</code>, and this time, it will pass!</p>
+<h2>One last problem</h2>
+<p>While we've now solved the issue of testing our hook, we are left with one last little problem - testing a component that uses our hook.</p>
+<pre><code class="language-js">function ShowAmiibo({ name }) {
+   const amiibo = useAmiibo(name)
+   return amiibo &amp;&amp; &lt;img src={amiibo.image} alt={name} /&gt; || null
+}
+</code></pre>
+<p>This component gets a name passed in on <code>props</code>, fetches the matching Amiibo and displays it. We can test it like this:</p>
+<pre><code class="language-js">it('shows Zelda', () =&gt; {
+    render(&lt;ShowAmiibo name='zelda' /&gt;)
+    expect(screen.getByAltText('zelda')).toBeTruthy()
+}
+</code></pre>
+<p>But, the test fails and it throws that same warning again! Just like before, the test is completing before the async part of our hook has run. But this time, we can't use <code>waitForNextUpdate()</code>, because we never called <code>renderHook()</code>.</p>
+<p>Luckily, there is a similar function called <code>waitFor()</code> provided with React Testing Library. This function can be used to pause our test until a specific condition is true - usually until a specific element has been rendered.</p>
+<pre><code class="language-js">it('shows Zelda', async () =&gt; {
+    render(&lt;ShowAmiibo name='zelda')
+    await waitFor(() =&gt; screen.getByAltText('zelda'))
+    expect(screen.getByAltText('zelda').toBeTruthy()
+}
+</code></pre>
+<p>So now our test renders our component, and then waits until the DOM contains an element with the alt text <code>zelda</code>. If the element never appears, the test will eventually time out and fail. In our case though, the element is there, and the test passes!</p>
+<p>While the existence of a specific element is the most common thing to wait for, we do have other options. For example, the situation that kicked off this whole investigation involved a hook which called an API to check if a user had access to a specific endpoint. There were three possible scenarios.</p>
+<ol>
+<li>The user definitely has access. Do nothing.</li>
+<li>The user definitely doesn't have access. Hide the form component and show a message.</li>
+<li>We're not sure if the user has access - either the API call hasn't returned yet, or it returned an error. In these cases, we want to do nothing. For our scenario, it was better to allow a potentially unauthorised user to  use the form than to block or slow down an authorised user. (The unauthorised user would get blocked by the API when they submitted the form anyway, so there was no real harm in letting them try.)</li>
+</ol>
+<p>Because scenarios 1 and 3 didn't involve any changes to the DOM, we couldn't wait for any specific element to appear on the screen. Instead, we waited for the API call to happen.</p>
+<pre><code class="language-js">it('doesn\'t change anything when the API returns', async () =&gt; {
+   const spy = jest.spyOn(axios, 'get')
+   render(&lt;AccessControlledForm /&gt;)
+   await waitFor(() =&gt; expect(spy).toHaveBeenCalled())
+   expect(form).toBeTruthy()
+}
+</code></pre>
+<p>Another common scenario is needing to wait for an element to disappear. For example, waiting for a loading spinner to disappear can be a good way to wait until an API call returns, without needing to know exactly what is going to appear on the page. In these cases, we can use <code>waitForElementToBeRemoved()</code></p>
+<pre><code class="language-js">it('shows Zelda', async () =&gt; {
+    render(&lt;ShowAmiibo name='zelda' /&gt;
+    await waitForElementToBeRemoved(() =&gt; screen.getByTestId('spinner'))
+    expect(screen.getByAltText('zelda').toBeTruthy()
+})
+</code></pre>
+<p>And, finally, sometimes the solution is to just do what the warning says, and wrap the call in <code>act()</code>.</p>
+<pre><code class="language-js">const submitForm = async () =&gt; {  
+  await act(async () =&gt; {
+    const form = screen.getByRole('form')
+    fireEvent.submit(form)
+  });  
+};
+</code></pre>
+<p>This is a utility function we use in some tests. It submits a form which triggers an API call. We could wait for the API call to return, and then wait for some change in the DOM, but often we don't really care about the returned result. For example, if we were testing that the form reset itself after submission - there are no DOM changes, only changes to the values of the form elements. In this case, we found using <code>act()</code> to be the simplest and clearest way to ensure all our async code executed correctly.</p>
+<p>One small word of warning though - if the warning is turning up as a result of a call to <code>render()</code> or <code>renderHook()</code>, then wrapping it in <code>act()</code> isn't going to help, as the call is already wrapped in <code>act()</code>. This happens to me a lot when I have a component which makes an API call as soon as it loads. If I call <code>render()</code> inside of <code>beforeEach()</code>, <code>beforeEach()</code> returns before the API call has returned, triggering the warning. This is especially frustrating because the tests all work fine when I call <code>render()</code> inside each test - the warning only appears after I refactor my code to use <code>beforeEach()</code>! In these cases, I usually use <code>waitForElementToBeRemoved()</code> inside <code>beforeEach()</code>, to wait for a spinner to disappear.</p>
+<p>Finally, if you're wondering why the function is named &quot;act&quot;,  and you've made it this far, well, I'd hate for you to leave disappointed. &quot;Act&quot; comes from the &quot;prepare, act, assert&quot; testing pattern - it's equivalent to the &quot;when&quot; in &quot;given, when then&quot;, if you're more familiar with that nomenclature.</p>
+<h2>tl;dr</h2>
+<p>So, what did we learn?</p>
+<ul>
+<li>Hooks are made of closures and rely on the component lifecycle to work correctly. As a result, we need to use something like <code>renderHook()</code> to test them.</li>
+<li>Async code executing after a test has finished will result in a warning being thrown. This is a Good Thing as it helps ensure that we're testing exactly what we intend to test.</li>
+<li><code>await waitForNextUpdate()</code> will pause a test until the test component is re-rendered, giving any async callbacks a chance to run.</li>
+<li><code>await waitFor(...)</code> will wait until a specific condition has been met. We can wait for anything, but the most common use cases are waiting for a DOM element to appear, or waiting for a specific function (like <code>Axios.get</code>) to have been called. We can also <code>await waitForElementToBeRemoved(...)</code></li>
+<li>sometimes, it really is best to just do what the warning says and wrap the code in <code>act()</code>. This is most useful in cases where our actions have side effects that we don't care about.</li>
+</ul>
+<p>Hopefully, all of this has given you a better understanding of how hooks work, and will help you avoid pesky warnings in your tests in the future!</p>
+<!--stackedit_data:
+eyJoaXN0b3J5IjpbOTU2NzY2OTk0LDMxNjIwNTg5MSw0NTUwND
+YwLDE5NjY0NzI5MDgsOTE3OTM0MjkyLDY0MTI2MTQ1OCwtOTM1
+MjI2NTIsLTE0MDA0NzI5NjEsMTE3MDc1ODc5MSw4MTIxNTk5OT
+csNTQ0MTQxMjY0LDE1NTc5NDY3MzcsMTc3OTk0ODA5OV19
+--></main>
+</body>
+</html>

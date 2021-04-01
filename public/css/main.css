@@ -1,0 +1,14 @@
+body {
+  margin: 40px;
+  font-size: 24px;
+  font-family: 'Mulish', sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Raleway', sans-serif;
+}
+
+main {
+  margin: auto;
+  max-width: 80ch;
+}
