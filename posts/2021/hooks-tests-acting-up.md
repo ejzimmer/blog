@@ -1,3 +1,10 @@
+---
+layout: base-layout.njk
+title: Hooks Tests Acting Up
+date: 2021-03-31
+tags: ['post', 'react']
+---
+
 A co-worker and I were writing tests for a hook we'd created the other day, and we kept running into this mysterious warning.
 
 ```
