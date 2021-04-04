@@ -6,9 +6,18 @@ body {
 
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Raleway', sans-serif;
+  margin-top: 1.2em;
 }
 
 main {
   margin: auto;
   max-width: 80ch;
+}
+
+li {
+  margin-bottom: .5em;
+}
+
+pre[class*="language-"] {
+  margin: 2em 0;
 }

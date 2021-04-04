@@ -8,25 +8,25 @@ tags: ['post', 'react']
 
 A co-worker and I were writing tests for a hook we'd created the other day, and we kept running into this mysterious warning.
 
-```
-    Warning: An update to TestHook inside a test was not wrapped in act(...).
-    
-    When testing, code that causes React state updates should be wrapped into act(...):
-    
-    act(() => {
-      /* fire events that update state */
-    });
-    /* assert on the output */
-    
-    This ensures that you're testing the behavior the user would see in the browser. Learn more at https://fb.me/react-wrap-tests-with-act
-        in TestHook
-        in Suspense
+```text
+Warning: An update to TestHook inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://fb.me/react-wrap-tests-with-act
+    in TestHook
+    in Suspense
 ```
 
 We didn't find this warning particularly enlightening, especially given that a cursory reading of the linked documentation reveals
-```
-You might find using act() directly a bit too verbose. To avoid some of the boilerplate, you could use a library like React Testing Library, whose helpers are wrapped with act().
-```
+
+> You might find using act() directly a bit too verbose. To avoid some of the boilerplate, you could use a library like React Testing Library, whose helpers are wrapped with act().
+
 
 We were using React Testing Library! Everything was already wrapped in `act()`! And our tests were actually passing. It was a bit of a mystery, so we decided to dig a little deeper and work out what was really going on. What resulted was a wild ride through the inner workings of hooks, testing utilities, and how asynchronous events are handled in JavaScript. If you're curious too, then keep reading. If you just want to know how to make the warning go away, then skip ahead to the tl;dr.
 
@@ -188,19 +188,19 @@ const { result, rerender, unmount, ...asynUtils } = renderHook(...)
 ## The Act Warning
 This - finally - brings us to the warning that started this whole journey. 
 
-```
+```text
 Warning: An update to TestHook inside a test was not wrapped in act(...).
-    
-    When testing, code that causes React state updates should be wrapped into act(...):
-    
-    act(() => {
-      /* fire events that update state */
-    });
-    /* assert on the output */
-    
-    This ensures that you're testing the behavior the user would see in the browser. Learn more at https://fb.me/react-wrap-tests-with-act
-        in TestHook
-        in Suspense
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://fb.me/react-wrap-tests-with-act
+    in TestHook
+    in Suspense
 ```
 
 As I mentioned earlier, this is particularly confusing because the docs clearly state that both `render()` and `renderHook()` already wrap the code in `act()`.
