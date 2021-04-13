@@ -52,7 +52,7 @@ myCounter.increment()
 console.log(myCounter.current()) // 1
 console.log(_count) // undefined
 ```
-Here, the `counter()` function stores its internal state in a variable called `_count`. It also returns an object with two functions on it - `increment()` and `count()`. Because `_count` is defined outside of `increment()` and `current()`, both functions share the same value, and that value is maintained independent of calls to either function. And, because `_count` is defined inside `counter()`, nothing outside `counter()` can access it. This is  we want in a hook!
+Here, the `counter()` function stores its internal state in a variable called `_count`. It also returns an object with two functions on it - `increment()` and `count()`. Because `_count` is defined outside of `increment()` and `current()`, both functions share the same value, and that value is maintained independent of calls to either function. And, because `_count` is defined inside `counter()`, nothing outside `counter()` can access it. This is what we want in a hook!
 
 (If this seems confusing, have a look at [the MDN guide to closures](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Closures), or [the chapter on scope and closures in Kyle Simpson's excellent You Don't Know JS Yet](https://github.com/getify/You-Dont-Know-JS/blob/2nd-ed/scope-closures/README.md))
 
