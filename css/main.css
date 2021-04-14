@@ -21,3 +21,8 @@ li {
 pre[class*="language-"] {
   margin: 2em 0;
 }
+
+img {
+  display: block;
+  margin: 3em auto;
+}
